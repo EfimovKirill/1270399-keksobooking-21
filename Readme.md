@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Kirill Efimov](https://up.htmlacademy.ru/javascript/21/user/1270399).
-* Наставник: `Неизвестно`.
+* Наставник: `Василий Подоплелов`.
 
 ---
 
