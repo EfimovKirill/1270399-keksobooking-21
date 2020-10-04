@@ -1,6 +1,6 @@
-`use strict`;
+'use strict';
 
-//Объявление переменных
+// Объявление переменных
 const HOUSING_TYPES = [`palace`, `flat`, `house`, `bungalow`];
 const TIMES = [`12:00`, `13:00`, `14:00`];
 const SERVICES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
@@ -11,22 +11,22 @@ const PINS_COUNT = 8;
 
 let pins = [];
 
-//Поиск элементов
+// Поиск элементов
 let map = document.querySelector(`.map`);
 let mapPins = map.querySelector(`.map__pins`);
 let mapPinsTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
 
-//Открытие карты
+// Открытие карты
 map.classList.remove(`map--faded`);
 
-//Функция для создание случайного числа
+// Функция для создание случайного числа
 let getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-//Функция создание массива меток с объектами
-let createPinArray = function (pinsCount) {
-  for (let i= 1; i <= PINS_COUNT; i++) {
+// Функция создание массива меток с объектами
+let createPinArray = function () {
+  for (let i = 1; i <= PINS_COUNT; i++) {
     pins[i] = {
       author: {
         avatar: `img/avatars/user0` + i + `.png`
@@ -40,20 +40,20 @@ let createPinArray = function (pinsCount) {
         guests: getRandomNumber(0, 4),
         checkin: TIMES[getRandomNumber(0, TIMES.length)],
         checkout: TIMES[getRandomNumber(0, TIMES.length)],
-        features: SERVICES.slice[0, getRandomNumber(0, SERVICES.length)],
+        features: SERVICES.slice(0, getRandomNumber(0, SERVICES.length)),
         description: `Опишите Ваше желье...`,
-        photos: PHOTOS.slice[0, getRandomNumber(0, PHOTOS.length)]
+        photos: PHOTOS.slice(0, getRandomNumber(0, PHOTOS.length))
       },
       location: {
-          x: getRandomNumber(0, 1201),
-          y: getRandomNumber(130, 631)
+        x: getRandomNumber(0, 1201),
+        y: getRandomNumber(130, 631)
       }
     };
   }
   return pins;
 };
 
-//Функция, создающая метку
+// Функция, создающая метку
 let createPinElement = function (pinValue) {
   let pinElement = mapPinsTemplate.cloneNode(true);
 
@@ -65,11 +65,11 @@ let createPinElement = function (pinValue) {
   return pinElement;
 };
 
-//Функция, добавляющая метку
+// Функция, добавляющая метку
 let addPinElement = function () {
   let fragment = document.createDocumentFragment();
   createPinArray(PINS_COUNT);
-  for (let i= 1; i <= PINS_COUNT; i++) {
+  for (let i = 1; i <= PINS_COUNT; i++) {
     fragment.appendChild(createPinElement(pins[i]));
   }
   mapPins.appendChild(fragment);
