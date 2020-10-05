@@ -9,8 +9,6 @@ const PIN_WIDTH = 40;
 const PIN_HEIGHT = 40;
 const PINS_COUNT = 8;
 
-let pins = [];
-
 // Поиск элементов
 let map = document.querySelector(`.map`);
 let mapPins = map.querySelector(`.map__pins`);
@@ -26,7 +24,8 @@ let getRandomNumber = function (min, max) {
 
 // Функция создание массива меток с объектами
 let createPinArray = function () {
-  for (let i = 1; i <= PINS_COUNT; i++) {
+  let pins = [];
+  for (let i = 0; i <= PINS_COUNT - 1; i++) {
     pins[i] = {
       author: {
         avatar: `img/avatars/user0` + i + `.png`
