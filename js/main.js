@@ -9,6 +9,8 @@ const PIN_WIDTH = 40;
 const PIN_HEIGHT = 40;
 const PINS_COUNT = 8;
 
+
+
 // Поиск элементов
 let map = document.querySelector(`.map`);
 let mapPins = map.querySelector(`.map__pins`);
@@ -23,10 +25,10 @@ let getRandomNumber = function (min, max) {
 };
 
 // Функция создание массива меток с объектами
-let createPinArray = function () {
+let createPinsArray = function (pinsCount) {
   let pins = [];
-  for (let i = 0; i <= PINS_COUNT - 1; i++) {
-    pins[i] = {
+    for (let i = 1; i <= pinsCount; i++) {
+    let pin = {
       author: {
         avatar: `img/avatars/user0` + i + `.png`
       },
@@ -48,12 +50,15 @@ let createPinArray = function () {
         y: getRandomNumber(130, 631)
       }
     };
+    pins.push(pin);
   }
   return pins;
 };
 
+let arrayOfPins = createPinsArray(PINS_COUNT);
+
 // Функция, создающая метку
-let createPinElement = function (pinValue) {
+let createPinsElement = function (pinValue) {
   let pinElement = mapPinsTemplate.cloneNode(true);
 
   pinElement.style.left = pinValue.location.x + PIN_WIDTH / 2 + `px`;
@@ -67,9 +72,8 @@ let createPinElement = function (pinValue) {
 // Функция, добавляющая метку
 let addPinElement = function () {
   let fragment = document.createDocumentFragment();
-  createPinArray(PINS_COUNT);
-  for (let i = 1; i <= PINS_COUNT; i++) {
-    fragment.appendChild(createPinElement(pins[i]));
+  for (let i = 0; i <= arrayOfPins.length - 1; i++) {
+    fragment.appendChild(createPinsElement(arrayOfPins[i]));
   }
   mapPins.appendChild(fragment);
 };
