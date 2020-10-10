@@ -30,8 +30,6 @@ let getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-
-
 // Функция создание массива меток с объектами
 let createPinsArray = function (pinsCount) {
   let pins = [];
@@ -88,15 +86,7 @@ let addPinElement = function () {
 
 addPinElement();
 
-const popAdvertisement = function (array, callback) {
-  const fragment = document.createDocumentFragment();
-  fragment.append(callback(array[0]));
-
-  return fragment;
-};
-
-
-//Деактивация страницы
+// Деактивация страницы
 let turnOffPage = function () {
   map.classList.add(`map--faded`);
   adForm.classList.add(`ad-form--disabled`);
@@ -107,14 +97,14 @@ let turnOffPage = function () {
     for (let i = 0; i < fieldSets.length - 1; i++) {
       fieldSets[i].disabled = true;
     }
-  }
+  };
 
   disabledFieldSets(adForm);
   disabledFieldSets(mapFiltersForm);
 };
 turnOffPage();
 
-//Функция нажатия кнопки мыши
+// Функция нажатия кнопки мыши
 const clickMouseButton = function (click) {
   if (typeof click === `object`) {
     switch (click.button) {
@@ -125,7 +115,7 @@ const clickMouseButton = function (click) {
 
 mapPinMain.addEventListener(`mousedown`, clickMouseButton);
 
-//Активация страницы
+// Активация страницы
 let turnOnPage = function () {
   map.classList.remove(`map--faded`);
   adForm.classList.remove(`ad-form--disabled`);
@@ -136,13 +126,13 @@ let turnOnPage = function () {
     for (let i = 0; i < fieldSets.length - 1; i++) {
       fieldSets[i].disabled = false;
     }
-  }
+  };
 
   enabledFieldSets(adForm);
   enabledFieldSets(mapFiltersForm);
 };
 
-//Функция нажатия клавиши enter
+// Функция нажатия клавиши enter
 mapPinMain.addEventListener(`keydown`, function (evt) {
   if (evt.key === `Enter`) {
     turnOnPage();
@@ -158,7 +148,7 @@ const renderAddress = function () {
 };
 renderAddress();
 
-//Валидация поля с количество мест
+// Валидация поля с количество мест
 const validateCapacity = function () {
   сapacity.addEventListener(`change`, function () {
     if (roomsNumber.value < сapacity.value) {
