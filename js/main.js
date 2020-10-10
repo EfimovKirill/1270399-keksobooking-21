@@ -8,11 +8,19 @@ const PHOTOS = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0
 const PIN_WIDTH = 40;
 const PIN_HEIGHT = 40;
 const PINS_COUNT = 8;
+const PIN_SIZE_WIDTH = 65;
+const PIN_SIZE_HEIGHT = 85;
 
 // Поиск элементов
 let map = document.querySelector(`.map`);
 let mapPins = map.querySelector(`.map__pins`);
 let mapPinsTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+let adForm = document.querySelector(`.ad-form`);
+let mapFiltersForm = document.querySelector(`.map__filters`);
+let mapPinMain = document.querySelector(`.map__pin--main`);
+let address = document.querySelector(`#address`);
+let roomsNumber = document.querySelector(`#room_number`);
+let сapacity = document.querySelector(`#capacity`);
 
 // Открытие карты
 map.classList.remove(`map--faded`);
@@ -21,6 +29,8 @@ map.classList.remove(`map--faded`);
 let getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+
+
 
 // Функция создание массива меток с объектами
 let createPinsArray = function (pinsCount) {
@@ -77,3 +87,93 @@ let addPinElement = function () {
 };
 
 addPinElement();
+
+const popAdvertisement = function (array, callback) {
+  const fragment = document.createDocumentFragment();
+  fragment.append(callback(array[0]));
+
+  return fragment;
+};
+
+
+//Деактивация страницы
+let turnOffPage = function () {
+  map.classList.add(`map--faded`);
+  adForm.classList.add(`ad-form--disabled`);
+  mapFiltersForm.classList.add(`ad-form--disabled`);
+
+  let disabledFieldSets = function (form) {
+    let fieldSets = form.children;
+    for (let i = 0; i < fieldSets.length - 1; i++) {
+      fieldSets[i].disabled = true;
+    }
+  }
+
+  disabledFieldSets(adForm);
+  disabledFieldSets(mapFiltersForm);
+};
+turnOffPage();
+
+//Функция нажатия кнопки мыши
+const clickMouseButton = function (click) {
+  if (typeof click === `object`) {
+    switch (click.button) {
+      case 0: turnOnPage();
+    }
+  }
+};
+
+mapPinMain.addEventListener(`mousedown`, clickMouseButton);
+
+//Активация страницы
+let turnOnPage = function () {
+  map.classList.remove(`map--faded`);
+  adForm.classList.remove(`ad-form--disabled`);
+  mapFiltersForm.classList.remove(`ad-form--disabled`);
+
+  let enabledFieldSets = function (form) {
+    let fieldSets = form.children;
+    for (let i = 0; i < fieldSets.length - 1; i++) {
+      fieldSets[i].disabled = false;
+    }
+  }
+
+  enabledFieldSets(adForm);
+  enabledFieldSets(mapFiltersForm);
+};
+
+//Функция нажатия клавиши enter
+mapPinMain.addEventListener(`keydown`, function (evt) {
+  if (evt.key === `Enter`) {
+    turnOnPage();
+  }
+});
+
+// Поле с адресом
+const renderAddress = function () {
+  let mapPinX = Math.round(parseInt(mapPinMain.style.left, 10) + (PIN_SIZE_WIDTH / 2));
+  let mapPinY = Math.round(parseInt(mapPinMain.style.top, 10) + PIN_SIZE_HEIGHT);
+
+  address.value = mapPinX + `,` + mapPinY;
+};
+renderAddress();
+
+//Валидация поля с количество мест
+const validateCapacity = function () {
+  сapacity.addEventListener(`change`, function () {
+    if (roomsNumber.value < сapacity.value) {
+      сapacity.setCustomValidity(`Слишком много гостей`);
+    } else {
+      сapacity.setCustomValidity(``);
+    }
+  });
+  roomsNumber.addEventListener(`change`, function () {
+    if (roomsNumber.value < сapacity.value) {
+      сapacity.setCustomValidity(`Слишком много гостей`);
+    } else {
+      сapacity.setCustomValidity(``);
+    }
+  });
+};
+
+validateCapacity();
