@@ -1,4 +1,4 @@
-'use strick';
+'use strict';
 
 (() => {
   // Поиск элементов
@@ -7,7 +7,7 @@
 
   // Валидация поля с количество мест
   let validateCapacity = (field) => {
-    field.addEventListener(`change`,  () => {
+    field.addEventListener(`change`, () => {
       if (roomsNumber.value < сapacity.value) {
         сapacity.setCustomValidity(`Слишком много гостей`);
       } else {

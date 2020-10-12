@@ -1,4 +1,4 @@
-'use strick';
+'use strict';
 
 (() => {
   const PIN_WIDTH = 40;
@@ -24,7 +24,7 @@
     return pinElement;
   };
 
-  //Функция для отключения поля
+  // Функция для отключения поля
   let disabledFieldSets = (form, booleanValue) => {
     let fieldSets = form.children;
     for (let i = 0; i < fieldSets.length - 1; i++) {
@@ -81,7 +81,7 @@
   mapPinMain.addEventListener(`keydown`, (evt) => {
     if (evt.key === `Enter`) {
       turnOnPage();
-    };
+    }
   });
 
   window.map = {

@@ -7,9 +7,6 @@
   // Поиск элементов
   let address = document.querySelector(`#address`);
 
-  // Открытие карты
-  map.classList.remove(`map--faded`);
-
   // Поле с адресом
   let renderAddress = () => {
     let mapPinX = Math.round(parseInt(window.map.mapPinMain.style.left, 10) + (PIN_SIZE_WIDTH / 2));
