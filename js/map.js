@@ -32,7 +32,6 @@
     }
   };
 
-
   // Деактивация страницы
   let turnOffPage = () => {
     map.classList.add(`map--faded`);
@@ -55,22 +54,33 @@
     disabledFieldSets(mapFiltersForm, false);
   };
 
-  // Функция, добавляющая метку
-  let addPinElement = () => {
+  let successHandler = (pinsValue) => {
     let fragment = document.createDocumentFragment();
-    for (let i = 0; i <= window.data.arrayOfPins.length - 1; i++) {
-      fragment.appendChild(createPinsElement(window.data.arrayOfPins[i]));
+    for (let i = 0; i < window.data.pinsCount - 1; i++) {
+      fragment.appendChild(createPinsElement(pinsValue[i]));
     }
     mapPins.appendChild(fragment);
   };
 
-  addPinElement();
+  let errorHandler = (errorMessage) => {
+    let node = document.createElement(`div`);
+    node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
+    node.style.position = `absolute`;
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = `30px`;
+    node.style.color = `white`;
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement(`afterbegin`, node);
+  };
 
   // Функция нажатия кнопки мыши
   let clickMouseButton = (click) => {
     if (typeof click === `object`) {
       switch (click.button) {
         case 0: turnOnPage();
+        case 0: window.backend.load(successHandler,errorHandler);
       }
     }
   };
@@ -81,6 +91,7 @@
   mapPinMain.addEventListener(`keydown`, (evt) => {
     if (evt.key === `Enter`) {
       turnOnPage();
+      window.backend.load(successHandler,errorHandler);
     }
   });
 

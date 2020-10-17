@@ -47,7 +47,8 @@
   let arrayOfPins = createPinsArray(PINS_COUNT);
 
   window.data = {
-    arrayOfPins: arrayOfPins
+    arrayOfPins: arrayOfPins,
+    pinsCount: PINS_COUNT
   };
 
 })();
