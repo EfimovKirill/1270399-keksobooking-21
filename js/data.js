@@ -2,7 +2,7 @@
 
 (() => {
 
-// Объявление переменных
+  // Объявление переменных
   const PINS_COUNT = 8;
   /*
   const HOUSING_TYPES = [`palace`, `flat`, `house`, `bungalow`];
