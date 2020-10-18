@@ -56,7 +56,7 @@
 
   let successHandler = (pinsValue) => {
     let fragment = document.createDocumentFragment();
-    for (let i = 0; i < window.data.pinsCount - 1; i++) {
+    for (let i = 0; i < window.data.pinsCount; i++) {
       fragment.appendChild(createPinsElement(pinsValue[i]));
     }
     mapPins.appendChild(fragment);
@@ -92,7 +92,7 @@
     if (evt.key === `Enter`) {
       turnOnPage();
       window.backend.load(successHandler, errorHandler);
-    };
+    }
   });
 
   window.map = {
