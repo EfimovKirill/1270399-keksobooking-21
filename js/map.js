@@ -80,8 +80,8 @@
     if (typeof click === `object`) {
       switch (click.button) {
         case 0: turnOnPage();
-        case 0: window.backend.load(successHandler,errorHandler);
       }
+      window.backend.load(successHandler, errorHandler);
     }
   };
 
@@ -91,12 +91,12 @@
   mapPinMain.addEventListener(`keydown`, (evt) => {
     if (evt.key === `Enter`) {
       turnOnPage();
-      window.backend.load(successHandler,errorHandler);
-    }
+      window.backend.load(successHandler, errorHandler);
+    };
   });
 
   window.map = {
-    mapPinMain: mapPinMain
+    mapPinMain
   };
 
 })();
