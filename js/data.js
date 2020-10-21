@@ -1,17 +1,20 @@
 'use strict';
 
 (() => {
-// Объявление переменных
+
+  // Объявление переменных
+  const PINS_COUNT = 8;
+  /*
   const HOUSING_TYPES = [`palace`, `flat`, `house`, `bungalow`];
   const TIMES = [`12:00`, `13:00`, `14:00`];
   const SERVICES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
   const PHOTOS = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
-  const PINS_COUNT = 8;
 
   // Функция для создание случайного числа
   let getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
+
 
   // Функция создание массива меток с объектами
   let createPinsArray = (pinsCount) => {
@@ -45,9 +48,10 @@
   };
 
   let arrayOfPins = createPinsArray(PINS_COUNT);
+  */
 
   window.data = {
-    arrayOfPins: arrayOfPins
+    pinsCount: PINS_COUNT
   };
 
 })();
