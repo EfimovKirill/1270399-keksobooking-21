@@ -34,8 +34,8 @@
 
   let clearPins = (container) => {
     container.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach((element) => {
-        container.removeChild(element);
-      });
+      container.removeChild(element);
+    });
   };
 
   let renderFragment = (arrayOfPins, filterCallback) => {
