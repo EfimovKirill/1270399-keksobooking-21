@@ -1,9 +1,9 @@
 'use strict';
 
-(() => {
+//(() => {
 
   // Объявление переменных
-  const PINS_COUNT = 8;
+
   /*
   const HOUSING_TYPES = [`palace`, `flat`, `house`, `bungalow`];
   const TIMES = [`12:00`, `13:00`, `14:00`];
@@ -50,9 +50,5 @@
   let arrayOfPins = createPinsArray(PINS_COUNT);
   */
 
-  window.data = {
-    pinsCount: PINS_COUNT
-  };
-
-})();
+//})();
 

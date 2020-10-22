@@ -5,7 +5,7 @@
   "description": "Личный проект «Кексобукинг» от HTML Academy",
   "repository": {
     "type": "git",
-    "url": "git@github.com:htmlacademy-javascript/1270399-keksobooking-21.git"
+    "url": "git+ssh://git@github.com/htmlacademy-javascript/1270399-keksobooking-21.git"
   },
   "bugs": {
     "url": "https://github.com/htmlacademy-javascript/1270399-keksobooking-21/issues"
@@ -21,5 +21,9 @@
   },
   "engines": {
     "node": "8.11"
-  }
+  },
+  "homepage": "https://github.com/htmlacademy-javascript/1270399-keksobooking-21#readme",
+  "main": "index.js",
+  "keywords": [],
+  "author": ""
 }

@@ -3,6 +3,9 @@
 (() => {
   const PIN_WIDTH = 40;
   const PIN_HEIGHT = 40;
+  const PINS_COUNT = 5;
+
+  let offers = [];
 
   // Поиск элементов
   let map = document.querySelector(`.map`);
@@ -11,6 +14,11 @@
   let adForm = document.querySelector(`.ad-form`);
   let mapFiltersForm = document.querySelector(`.map__filters`);
   let mapPinMain = document.querySelector(`.map__pin--main`);
+  let housingType = document.querySelector(`#housing-type`);
+
+  let successHandler = (data) => {
+    offers = [...data];
+  };
 
   // Функция, создающая метку
   let createPinsElement = (pinValue) => {
@@ -22,6 +30,33 @@
     pinElement.querySelector(`img`).alt = pinValue.offer.title;
 
     return pinElement;
+  };
+
+  let clearPins = (container) => {
+    container.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach((element) => {
+        container.removeChild(element);
+      });
+  };
+
+  let renderFragment = (arrayOfPins, filterCallback) => {
+
+    let data = [...arrayOfPins];
+
+    if (filterCallback) {
+      data = window.filter.filterPins(data);
+    }
+
+    clearPins(mapPins);
+
+    let fragment = document.createDocumentFragment();
+
+    let takeNumber = data.length > PINS_COUNT ? PINS_COUNT : data.length;
+
+    for (let i = 0; i < takeNumber; i++) {
+      fragment.appendChild(createPinsElement(data[i]));
+    }
+
+    mapPins.appendChild(fragment);
   };
 
   // Функция для отключения поля
@@ -46,20 +81,16 @@
 
   // Активация страницы
   let turnOnPage = () => {
+    if (map.classList.contains(`map--faded`)) {
+      renderFragment(offers);
+    }
+
     map.classList.remove(`map--faded`);
     adForm.classList.remove(`ad-form--disabled`);
     mapFiltersForm.classList.remove(`ad-form--disabled`);
 
     disabledFieldSets(adForm, false);
     disabledFieldSets(mapFiltersForm, false);
-  };
-
-  let successHandler = (pinsValue) => {
-    let fragment = document.createDocumentFragment();
-    for (let i = 0; i < window.data.pinsCount; i++) {
-      fragment.appendChild(createPinsElement(pinsValue[i]));
-    }
-    mapPins.appendChild(fragment);
   };
 
   let errorHandler = (errorMessage) => {
@@ -93,6 +124,10 @@
       turnOnPage();
       window.backend.load(successHandler, errorHandler);
     }
+  });
+
+  housingType.addEventListener(`change`, () => {
+    renderFragment(offers, window.filter.filterPins);
   });
 
   window.map = {
