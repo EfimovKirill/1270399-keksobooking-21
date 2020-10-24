@@ -39,12 +39,12 @@
   let createCard = (element) => {
     let card = cardTemplate.cloneNode(true);
 
-    card.querySelector('.popup__title').textContent = element.offer.title;
-    card.querySelector('.popup__text--address').textContent = element.offer.address;
-    card.querySelector('.popup__text--price').textContent = `${element.offer.price} ₽/ночь`;
-    card.querySelector('.popup__type').textContent = element.offer.type;
-    card.querySelector('.popup__text--capacity').textContent = `${element.offer.rooms} комнаты для ${element.offer.guests}`;
-    card.querySelector('.popup__text--time').textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}`;
+    card.querySelector(`.popup__title`).textContent = element.offer.title;
+    card.querySelector(`.popup__text--address`).textContent = element.offer.address;
+    card.querySelector(`.popup__text--price`).textContent = `${element.offer.price} ₽/ночь`;
+    card.querySelector(`.popup__type`).textContent = element.offer.type;
+    card.querySelector(`.popup__text--capacity`).textContent = `${element.offer.rooms} комнаты для ${element.offer.guests}`;
+    card.querySelector(`.popup__text--time`).textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}`;
 
     let popupFeatures = card.querySelector(`.popup__features`);
     element.offer.features.forEach((el) => {
@@ -102,7 +102,7 @@
     mapPins.appendChild(pinsContainer);
   };
 
-   // Функция, открывающая попап
+  // Функция, открывающая попап
   let openPopup = (popup) => {
     let mapCard = map.querySelector(`.map__card`);
     if (mapCard) {
