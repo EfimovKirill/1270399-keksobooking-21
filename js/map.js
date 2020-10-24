@@ -3,7 +3,7 @@
 (() => {
   const PIN_WIDTH = 40;
   const PIN_HEIGHT = 40;
-  const PINS_COUNT = 5;
+  const PINS_COUNT_DEFAULT = 5;
 
   let offers = [];
 
@@ -15,6 +15,10 @@
   let mapFiltersForm = document.querySelector(`.map__filters`);
   let mapPinMain = document.querySelector(`.map__pin--main`);
   let housingType = document.querySelector(`#housing-type`);
+  let fragment = document.createDocumentFragment();
+  let cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
+  let mapFiltersContainer = map.querySelector(`.map__filters-container`);
+  let pinsContainer = document.createElement(`div`);
 
   let successHandler = (data) => {
     offers = [...data];
@@ -32,10 +36,37 @@
     return pinElement;
   };
 
-  let clearPins = (container) => {
-    container.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach((element) => {
-      container.removeChild(element);
+  let createCard = (element) => {
+    let card = cardTemplate.cloneNode(true);
+
+    card.querySelector('.popup__title').textContent = element.offer.title;
+    card.querySelector('.popup__text--address').textContent = element.offer.address;
+    card.querySelector('.popup__text--price').textContent = `${element.offer.price} ₽/ночь`;
+    card.querySelector('.popup__type').textContent = element.offer.type;
+    card.querySelector('.popup__text--capacity').textContent = `${element.offer.rooms} комнаты для ${element.offer.guests}`;
+    card.querySelector('.popup__text--time').textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}`;
+
+    let popupFeatures = card.querySelector(`.popup__features`);
+    element.offer.features.forEach((el) => {
+      let popupFeatureItem = document.createElement(`li`);
+      popupFeatureItem.className = `popup__feature popup__feature--${el}`;
+      popupFeatures.appendChild(popupFeatureItem);
     });
+
+    card.querySelector(`.popup__description`).textContent = element.offer.description;
+    let popupPhotos = card.querySelector(`.popup__photos`);
+    element.offer.photos.forEach((el) => {
+      let popupPhotoItem = document.createElement(`img`);
+      popupPhotoItem.className = `popup__photo`;
+      popupPhotoItem.src = el;
+      popupPhotoItem.width = 45;
+      popupPhotoItem.height = 40;
+      popupPhotoItem.alt = `Фотография жилья`;
+      popupPhotos.appendChild(popupPhotoItem);
+    });
+    card.querySelector(`.popup__avatar`).src = element.author.avatar;
+
+    return card;
   };
 
   let renderFragment = (arrayOfPins, filterCallback) => {
@@ -46,20 +77,43 @@
       data = window.filter.filterPins(data);
     }
 
-    clearPins(mapPins);
+    let pinsCount = data.length > PINS_COUNT_DEFAULT ? PINS_COUNT_DEFAULT : data.length;
 
-    let fragment = document.createDocumentFragment();
+    pinsContainer.innerHTML = ``;
 
-    let takeNumber = data.length > PINS_COUNT ? PINS_COUNT : data.length;
+    for (let i = 0; i < pinsCount; i++) {
+      let pin = createPinsElement(data[i]);
+      let popup = createCard(data[i]);
+      let closePopup = popup.querySelector(`.popup__close`);
+      fragment.appendChild(pin);
 
-    for (let i = 0; i < takeNumber; i++) {
-      fragment.appendChild(createPinsElement(data[i]));
+      pin.addEventListener(`click`, () => {
+        openPopup(popup);
+      });
+
+      pin.addEventListener(`keydown`, (evt) => {
+        if (evt.key === `Enter`) {
+          openPopup(popup);
+        }
+      });
     }
 
-    mapPins.appendChild(fragment);
+    //mapPins.appendChild(fragment);
+    pinsContainer.appendChild(fragment);
+    mapPins.appendChild(pinsContainer);
   };
 
-  // Функция для отключения поля
+  let openPopup = (popup) => {
+    let mapCard = map.querySelector(`.map__card`);
+    if (mapCard) {
+      mapCard.remove();
+    }
+    fragment.appendChild(popup);
+    map.insertBefore(fragment, mapFiltersContainer);
+    document.addEventListener(`keydown`, createEscHandler(popup));
+  };
+
+ // Функция для отключения поля
   let disabledFieldSets = (form, booleanValue) => {
     let fieldSets = form.children;
     for (let i = 0; i < fieldSets.length - 1; i++) {

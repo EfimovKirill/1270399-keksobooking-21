@@ -4,14 +4,7 @@
   let housingType = document.querySelector(`#housing-type`);
 
   let filterPins = (arrayOfPins) => {
-    if (housingType.value === `any`) {
-      return arrayOfPins;
-    }
-    let filteredPins = arrayOfPins.filter((element) => {
-      return element.offer.type === housingType.value;
-    });
-
-    return filteredPins;
+    return housingType.value === `any` ? arrayOfPins : arrayOfPins.filter(element => element.offer.type === housingType.value);
   };
 
   window.filter = {
