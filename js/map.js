@@ -14,7 +14,7 @@
   let adForm = document.querySelector(`.ad-form`);
   let mapFiltersForm = document.querySelector(`.map__filters`);
   let mapPinMain = document.querySelector(`.map__pin--main`);
-  let housingType = document.querySelector(`#housing-type`);
+  let housingTypeElement = document.querySelector(`#housing-type`);
   let fragment = document.createDocumentFragment();
   let cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
   let mapFiltersContainer = map.querySelector(`.map__filters-container`);
@@ -69,6 +69,7 @@
     return card;
   };
 
+  // Функция, отрисовывающая попап
   let renderFragment = (arrayOfPins, filterCallback) => {
 
     let data = [...arrayOfPins];
@@ -84,7 +85,6 @@
     for (let i = 0; i < pinsCount; i++) {
       let pin = createPinsElement(data[i]);
       let popup = createCard(data[i]);
-      let closePopup = popup.querySelector(`.popup__close`);
       fragment.appendChild(pin);
 
       pin.addEventListener(`click`, () => {
@@ -98,11 +98,11 @@
       });
     }
 
-    //mapPins.appendChild(fragment);
     pinsContainer.appendChild(fragment);
     mapPins.appendChild(pinsContainer);
   };
 
+   // Функция, открывающая попап
   let openPopup = (popup) => {
     let mapCard = map.querySelector(`.map__card`);
     if (mapCard) {
@@ -110,7 +110,6 @@
     }
     fragment.appendChild(popup);
     map.insertBefore(fragment, mapFiltersContainer);
-    document.addEventListener(`keydown`, createEscHandler(popup));
   };
 
  // Функция для отключения поля
@@ -180,7 +179,7 @@
     }
   });
 
-  housingType.addEventListener(`change`, () => {
+  housingTypeElement.addEventListener(`change`, () => {
     renderFragment(offers, window.filter.filterPins);
   });
 
