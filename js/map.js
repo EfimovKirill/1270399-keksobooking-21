@@ -112,7 +112,7 @@
     map.insertBefore(fragment, mapFiltersContainer);
   };
 
- // Функция для отключения поля
+  // Функция для отключения поля
   let disabledFieldSets = (form, booleanValue) => {
     let fieldSets = form.children;
     for (let i = 0; i < fieldSets.length - 1; i++) {
