@@ -153,7 +153,7 @@
   // Активация страницы
   let turnOnPage = () => {
     if (map.classList.contains(`map--faded`)) {
-     renderOffers(offers);
+      renderOffers(offers);
     }
 
     map.classList.remove(`map--faded`);

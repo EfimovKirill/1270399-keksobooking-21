@@ -9,10 +9,10 @@
   let address = document.querySelector(`#address`);
   let timeIn = document.querySelector(`#timein`);
   let timeOut = document.querySelector(`#timeout`);
-  let images = document.querySelector('#images');
-  let adFormPhoto = document.querySelector('.ad-form__photo');
-  let avatar = document.querySelector('#avatar');
-  let avatarsPreviewImg = document.querySelector('ad-form-header__avatarsPreview img');
+  let images = document.querySelector(`#images`);
+  let adFormPhoto = document.querySelector(`.ad-form__photo`);
+  let avatar = document.querySelector(`#avatar`);
+  let avatarsPreviewImg = document.querySelector(`ad-form-header__avatarsPreview img`);
 
   // Валидация поля с количество мест
   let validateCapacity = (field) => {
@@ -33,22 +33,22 @@
     const MAX_TITLE_LENGTH = 100;
 
     if (title.validity.valueMissing) {
-      title.setCustomValidity('Обязательное поле!');
+      title.setCustomValidity(`Обязательное поле!`);
     } else {
-      title.setCustomValidity('');
+      title.setCustomValidity(``);
     }
 
-    title.addEventListener('input', () => {
-        let titleValueLength = title.value.length;
+    title.addEventListener(`input`, () => {
+      let titleValueLength = title.value.length;
 
-        if (titleValueLength < MIN_TITLE_LENGTH) {
-          title.setCustomValidity(`Добавьте ${MIN_TITLE_LENGTH - titleValueLength} символа`);
-        } else if (titleValueLength > MAX_TITLE_LENGTH) {
-          title.setCustomValidity(`Удалите ${titleValueLength - MAX_TITLE_LENGTH} символа`);
-        } else {
-          title.setCustomValidity('');
-        }
-      });
+      if (titleValueLength < MIN_TITLE_LENGTH) {
+        title.setCustomValidity(`Добавьте ${MIN_TITLE_LENGTH - titleValueLength} символа`);
+      } else if (titleValueLength > MAX_TITLE_LENGTH) {
+        title.setCustomValidity(`Удалите ${titleValueLength - MAX_TITLE_LENGTH} символа`);
+      } else {
+        title.setCustomValidity(``);
+       }
+    });
   };
 
   // Валидация цены на жилье
@@ -57,76 +57,76 @@
     const MAX_PRICE = 1000000;
 
     if (price.validity.valueMissing) {
-      price.setCustomValidity('Обязательное поле!');
+      price.setCustomValidity(`Обязательное поле!`);
     } else {
-      price.setCustomValidity('');
+      price.setCustomValidity(``);
     }
 
     type.addEventListener(`change`, () => {
-        switch (type.value) {
-          case `flat`:
-            minPrice = 1000;
-            break;
-          case `bungalow`:
-            minPrice = 0;
-            break;
-          case `house`:
-            minPrice = 5000;
-            break;
-          case `palace`:
-            minPrice = 10000;
-            break;
-          default:
-            minPrice = 0;
-        }
-      });
+      switch (type.value) {
+        case `flat`:
+          minPrice = 1000;
+          break;
+        case `bungalow`:
+          minPrice = 0;
+          break;
+        case `house`:
+          minPrice = 5000;
+          break;
+        case `palace`:
+          minPrice = 10000;
+          break;
+        default:
+          minPrice = 0;
+      }
+    });
 
-    price.addEventListener('input', () => {
-        price.setCustomValidity('');
-        if (price.value < minPrice) {
-          price.setCustomValidity('Слишком дешево');
-        } else if (price.value > MAX_PRICE) {
-          price.setCustomValidity('Слишком дорого');
-        } else {
-          price.setCustomValidity('');
-        }
-      });
+    price.addEventListener(`input`, () => {
+      price.setCustomValidity(``);
+      if (price.value < minPrice) {
+        price.setCustomValidity(`Слишком дешево`);
+      } else if (price.value > MAX_PRICE) {
+        price.setCustomValidity(`Слишком дорого`);
+      } else {
+        price.setCustomValidity(``);
+      }
+    });
   };
 
   // Запрет на изменение адреса
-  address.setAttribute('readonly', ``);
+  address.setAttribute(`readonly`, ``);
 
   // Установка одинакого времени
   let setSameTime = () => {
     timeIn.addEventListener(`change`, () => {
-        timeOut.value = timeIn.value;
-      });
+      timeOut.value = timeIn.value;
+    });
 
     timeOut.addEventListener(`change`, () => {
-        timeIn.value = timeOut.value;
-      });
+      timeIn.value = timeOut.value;
+    });
   };
 
   // Валидация фото
   let validatePhoto = (usersAvatar, avatarsPreview) => {
-    const IMAGE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+    const IMAGE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
 
-    usersAvatar.addEventListener('change', () => {
-        let file = usersAvatar.files[0];
-        let fileName = file.name.toLowerCase();
+    usersAvatar.addEventListener(`change`, () => {
+      let file = usersAvatar.files[0];
+      let fileName = file.name.toLowerCase();
 
-        let matches = IMAGE_TYPES.some((it) => fileName.endsWith(it));
+      let matches = IMAGE_TYPES.some((it) => fileName.endsWith(it));
 
-        if (matches) {
-          let reader = new FileReader();
+      if (matches) {
+        let reader = new FileReader();
 
-          reader.addEventListener('load', () => {
-              avatarsPreview.src = reader.result;
-            });
+        reader.addEventListener(`load`, () => {
+            avatarsPreview.src = reader.result;
+          });
 
-          reader.readAsDataURL(file);
-        }
-      });
+        reader.readAsDataURL(file);
+      }
+    });
   };
 
   validateCapacity(сapacity);
