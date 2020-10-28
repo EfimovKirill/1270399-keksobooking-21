@@ -22,6 +22,7 @@
 
   let successHandler = (data) => {
     offers = [...data];
+    turnOnPage();
   };
 
   // Функция, создающая метку
@@ -70,21 +71,15 @@
   };
 
   // Функция, отрисовывающая попап
-  let renderFragment = (arrayOfPins, filterCallback) => {
-
-    let data = [...arrayOfPins];
-
-    if (filterCallback) {
-      data = window.filter.filterPins(data);
-    }
-
-    let pinsCount = data.length > PINS_COUNT_DEFAULT ? PINS_COUNT_DEFAULT : data.length;
+  let renderOffers = (arrayOfPins) => {
+    let pinsCount = arrayOfPins.length > PINS_COUNT_DEFAULT ? PINS_COUNT_DEFAULT : arrayOfPins.length;
 
     pinsContainer.innerHTML = ``;
 
     for (let i = 0; i < pinsCount; i++) {
-      let pin = createPinsElement(data[i]);
-      let popup = createCard(data[i]);
+      let pin = createPinsElement(arrayOfPins[i]);
+      let popup = createCard(arrayOfPins[i]);
+      let closeCard = popup.querySelector(`.popup__close`);
       fragment.appendChild(pin);
 
       pin.addEventListener(`click`, () => {
@@ -94,6 +89,16 @@
       pin.addEventListener(`keydown`, (evt) => {
         if (evt.key === `Enter`) {
           openPopup(popup);
+        }
+      });
+
+      closeCard.addEventListener(`click`, () => {
+        closePopup(popup);
+      });
+
+      popup.addEventListener(`keydown`, (evt) => {
+        if (evt.key === `Escape`) {
+          closePopup(popup);
         }
       });
     }
@@ -110,6 +115,19 @@
     }
     fragment.appendChild(popup);
     map.insertBefore(fragment, mapFiltersContainer);
+  };
+
+  // Функция, закрывающая попап по кнопке
+  let onPopupEscPress = function (evt) {
+    if (evt.key === `Escape`) {
+      evt.preventDefault();
+      closePopup();
+    }
+  };
+
+  let closePopup = (popup) => {
+    popup.remove();
+    document.removeEventListener(`keydown`, onPopupEscPress);
   };
 
   // Функция для отключения поля
@@ -135,7 +153,7 @@
   // Активация страницы
   let turnOnPage = () => {
     if (map.classList.contains(`map--faded`)) {
-      renderFragment(offers);
+     renderOffers(offers);
     }
 
     map.classList.remove(`map--faded`);
@@ -162,9 +180,6 @@
   // Функция нажатия кнопки мыши
   let clickMouseButton = (click) => {
     if (typeof click === `object`) {
-      switch (click.button) {
-        case 0: turnOnPage();
-      }
       window.backend.load(successHandler, errorHandler);
     }
   };
@@ -174,13 +189,13 @@
   // Функция нажатия клавиши enter
   mapPinMain.addEventListener(`keydown`, (evt) => {
     if (evt.key === `Enter`) {
-      turnOnPage();
       window.backend.load(successHandler, errorHandler);
     }
   });
 
   housingTypeElement.addEventListener(`change`, () => {
-    renderFragment(offers, window.filter.filterPins);
+    let filteredOffers = window.filter.filterPins(offers);
+    renderOffers(filteredOffers);
   });
 
   window.map = {
