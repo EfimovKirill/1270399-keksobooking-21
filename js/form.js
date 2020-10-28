@@ -47,7 +47,7 @@
         title.setCustomValidity(`Удалите ${titleValueLength - MAX_TITLE_LENGTH} символа`);
       } else {
         title.setCustomValidity(``);
-       }
+      }
     });
   };
 
@@ -121,8 +121,8 @@
         let reader = new FileReader();
 
         reader.addEventListener(`load`, () => {
-            avatarsPreview.src = reader.result;
-          });
+          avatarsPreview.src = reader.result;
+        });
 
         reader.readAsDataURL(file);
       }
