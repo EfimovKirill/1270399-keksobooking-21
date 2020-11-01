@@ -39,7 +39,7 @@
         y: moveEvt.clientY
       };
 
-      if ((mapPinMain.offsetTop - shift.y) < MAX_HEIGHT && (mapPinMain.offsetTop - shift.y) > MIN_HEIGHT && (mapPinMain.offsetLeft - shift.x) < MAX_WIDTH && (mapPinMain.offsetLeft - shift.x) > MIN_WIDTH ) {
+      if ((mapPinMain.offsetTop - shift.y) < MAX_HEIGHT && (mapPinMain.offsetTop - shift.y) > MIN_HEIGHT && (mapPinMain.offsetLeft - shift.x) < MAX_WIDTH && (mapPinMain.offsetLeft - shift.x) > MIN_WIDTH) {
         mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + `px`;
         mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + `px`;
         address.value = (mapPinMain.offsetLeft - shift.x + PIN_SIZE_WIDTH / 2) + `,` + (mapPinMain.offsetTop - shift.y + PIN_SIZE_HEIGHT);

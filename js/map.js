@@ -97,7 +97,7 @@
     let button = target.closest(`.map__pin`);
     if (button.classList.contains(`map__pin--main`)) {
       return;
-    };
+    }
     let offerIndex = button.dataset.offerIndex;
     let currentOffer = offers[offerIndex];
     let currentPopup = createCard(currentOffer);
@@ -118,7 +118,7 @@
   };
 
   let closePopup = () => {
-    let card = document.querySelector(`.popup`)
+    let card = document.querySelector(`.popup`);
     card.remove();
     document.removeEventListener(`keydown`, onPopupEscPress);
   };
