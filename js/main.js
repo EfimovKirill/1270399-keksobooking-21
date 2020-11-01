@@ -1,20 +1,27 @@
-'use strict';
+// 'use strict';
 
-(() => {
-  const PIN_SIZE_WIDTH = 65;
-  const PIN_SIZE_HEIGHT = 85;
+// (() => {
+//   const PIN_SIZE_WIDTH = 65;
+//   const PIN_SIZE_HEIGHT = 85;
 
-  // Поиск элементов
-  let address = document.querySelector(`#address`);
+//   // Поиск элементов
 
-  // Поле с адресом
-  let renderAddress = () => {
-    let mapPinX = Math.round(parseInt(window.map.mapPinMain.style.left, 10) + (PIN_SIZE_WIDTH / 2));
-    let mapPinY = Math.round(parseInt(window.map.mapPinMain.style.top, 10) + PIN_SIZE_HEIGHT);
 
-    address.value = mapPinX + `,` + mapPinY;
-  };
+//   // Запрет на изменение адреса
 
-  renderAddress();
 
-})();
+//   // Поле с адресом
+//   let renderAddress = () => {
+//     let mapPinX = Math.round(parseInt(window.map.mapPinMain.style.left, 10) + (PIN_SIZE_WIDTH / 2));
+//     let mapPinY = Math.round(parseInt(window.map.mapPinMain.style.top, 10) + PIN_SIZE_HEIGHT);
+
+//     address.value = mapPinX + `,` + mapPinY;
+//   };
+
+//   renderAddress();
+
+//   window.main = {
+//     pinWidth : PIN_SIZE_WIDTH,
+//   };
+
+// })();

@@ -6,7 +6,6 @@
   let сapacity = document.querySelector(`#capacity`);
   let type = document.querySelector(`#type`);
   let price = document.querySelector(`#price`);
-  let address = document.querySelector(`#address`);
   let timeIn = document.querySelector(`#timein`);
   let timeOut = document.querySelector(`#timeout`);
   let images = document.querySelector(`#images`);
@@ -92,9 +91,6 @@
       }
     });
   };
-
-  // Запрет на изменение адреса
-  address.setAttribute(`readonly`, ``);
 
   // Установка одинакого времени
   let setSameTime = () => {

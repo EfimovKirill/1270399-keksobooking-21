@@ -78,34 +78,34 @@
 
     for (let i = 0; i < pinsCount; i++) {
       let pin = createPinsElement(arrayOfPins[i]);
-      let popup = createCard(arrayOfPins[i]);
-      let closeCard = popup.querySelector(`.popup__close`);
+      pin.dataset.offerIndex = i;
       fragment.appendChild(pin);
-
-      pin.addEventListener(`click`, () => {
-        openPopup(popup);
-      });
-
-      pin.addEventListener(`keydown`, (evt) => {
-        if (evt.key === `Enter`) {
-          openPopup(popup);
-        }
-      });
-
-      closeCard.addEventListener(`click`, () => {
-        closePopup(popup);
-      });
-
-      popup.addEventListener(`keydown`, (evt) => {
-        if (evt.key === `Escape`) {
-          closePopup(popup);
-        }
-      });
     }
 
     pinsContainer.appendChild(fragment);
     mapPins.appendChild(pinsContainer);
   };
+
+  let onPopupEscPress = (evt) => {
+    if (evt.key === `Escape`) {
+      closePopup();
+    }
+  };
+
+  mapPins.addEventListener(`click`, (evt) => {
+    let target = evt.target;
+    let button = target.closest(`.map__pin`);
+    if (button.classList.contains(`map__pin--main`)) {
+      return;
+    };
+    let offerIndex = button.dataset.offerIndex;
+    let currentOffer = offers[offerIndex];
+    let currentPopup = createCard(currentOffer);
+    openPopup(currentPopup);
+    let closeCard = document.querySelector(`.popup__close`);
+    closeCard.addEventListener(`click`, closePopup);
+    document.addEventListener(`keydown`, onPopupEscPress);
+  });
 
   // Функция, открывающая попап
   let openPopup = (popup) => {
@@ -117,16 +117,9 @@
     map.insertBefore(fragment, mapFiltersContainer);
   };
 
-  // Функция, закрывающая попап по кнопке
-  let onPopupEscPress = function (evt) {
-    if (evt.key === `Escape`) {
-      evt.preventDefault();
-      closePopup();
-    }
-  };
-
-  let closePopup = (popup) => {
-    popup.remove();
+  let closePopup = () => {
+    let card = document.querySelector(`.popup`)
+    card.remove();
     document.removeEventListener(`keydown`, onPopupEscPress);
   };
 
