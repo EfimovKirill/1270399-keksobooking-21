@@ -3,6 +3,9 @@
 (() => {
   const PIN_WIDTH = 40;
   const PIN_HEIGHT = 40;
+  const PINS_COUNT_DEFAULT = 5;
+
+  let offers = [];
 
   // Поиск элементов
   let map = document.querySelector(`.map`);
@@ -11,6 +14,16 @@
   let adForm = document.querySelector(`.ad-form`);
   let mapFiltersForm = document.querySelector(`.map__filters`);
   let mapPinMain = document.querySelector(`.map__pin--main`);
+  let housingTypeElement = document.querySelector(`#housing-type`);
+  let fragment = document.createDocumentFragment();
+  let cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
+  let mapFiltersContainer = map.querySelector(`.map__filters-container`);
+  let pinsContainer = document.createElement(`div`);
+
+  let successHandler = (data) => {
+    offers = [...data];
+    turnOnPage();
+  };
 
   // Функция, создающая метку
   let createPinsElement = (pinValue) => {
@@ -22,6 +35,92 @@
     pinElement.querySelector(`img`).alt = pinValue.offer.title;
 
     return pinElement;
+  };
+
+  let createCard = (element) => {
+    let card = cardTemplate.cloneNode(true);
+
+    card.querySelector(`.popup__title`).textContent = element.offer.title;
+    card.querySelector(`.popup__text--address`).textContent = element.offer.address;
+    card.querySelector(`.popup__text--price`).textContent = `${element.offer.price} ₽/ночь`;
+    card.querySelector(`.popup__type`).textContent = element.offer.type;
+    card.querySelector(`.popup__text--capacity`).textContent = `${element.offer.rooms} комнаты для ${element.offer.guests}`;
+    card.querySelector(`.popup__text--time`).textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}`;
+
+    let popupFeatures = card.querySelector(`.popup__features`);
+    element.offer.features.forEach((el) => {
+      let popupFeatureItem = document.createElement(`li`);
+      popupFeatureItem.className = `popup__feature popup__feature--${el}`;
+      popupFeatures.appendChild(popupFeatureItem);
+    });
+
+    card.querySelector(`.popup__description`).textContent = element.offer.description;
+    let popupPhotos = card.querySelector(`.popup__photos`);
+    element.offer.photos.forEach((el) => {
+      let popupPhotoItem = document.createElement(`img`);
+      popupPhotoItem.className = `popup__photo`;
+      popupPhotoItem.src = el;
+      popupPhotoItem.width = 45;
+      popupPhotoItem.height = 40;
+      popupPhotoItem.alt = `Фотография жилья`;
+      popupPhotos.appendChild(popupPhotoItem);
+    });
+    card.querySelector(`.popup__avatar`).src = element.author.avatar;
+
+    return card;
+  };
+
+  // Функция, отрисовывающая попап
+  let renderOffers = (arrayOfPins) => {
+    let pinsCount = arrayOfPins.length > PINS_COUNT_DEFAULT ? PINS_COUNT_DEFAULT : arrayOfPins.length;
+
+    pinsContainer.innerHTML = ``;
+
+    for (let i = 0; i < pinsCount; i++) {
+      let pin = createPinsElement(arrayOfPins[i]);
+      pin.dataset.offerIndex = i;
+      fragment.appendChild(pin);
+    }
+
+    pinsContainer.appendChild(fragment);
+    mapPins.appendChild(pinsContainer);
+  };
+
+  let onPopupEscPress = (evt) => {
+    if (evt.key === `Escape`) {
+      closePopup();
+    }
+  };
+
+  mapPins.addEventListener(`click`, (evt) => {
+    let target = evt.target;
+    let button = target.closest(`.map__pin`);
+    if (button.classList.contains(`map__pin--main`)) {
+      return;
+    }
+    let offerIndex = button.dataset.offerIndex;
+    let currentOffer = offers[offerIndex];
+    let currentPopup = createCard(currentOffer);
+    openPopup(currentPopup);
+    let closeCard = document.querySelector(`.popup__close`);
+    closeCard.addEventListener(`click`, closePopup);
+    document.addEventListener(`keydown`, onPopupEscPress);
+  });
+
+  // Функция, открывающая попап
+  let openPopup = (popup) => {
+    let mapCard = map.querySelector(`.map__card`);
+    if (mapCard) {
+      mapCard.remove();
+    }
+    fragment.appendChild(popup);
+    map.insertBefore(fragment, mapFiltersContainer);
+  };
+
+  let closePopup = () => {
+    let card = document.querySelector(`.popup`);
+    card.remove();
+    document.removeEventListener(`keydown`, onPopupEscPress);
   };
 
   // Функция для отключения поля
@@ -46,20 +145,16 @@
 
   // Активация страницы
   let turnOnPage = () => {
+    if (map.classList.contains(`map--faded`)) {
+      renderOffers(offers);
+    }
+
     map.classList.remove(`map--faded`);
     adForm.classList.remove(`ad-form--disabled`);
     mapFiltersForm.classList.remove(`ad-form--disabled`);
 
     disabledFieldSets(adForm, false);
     disabledFieldSets(mapFiltersForm, false);
-  };
-
-  let successHandler = (pinsValue) => {
-    let fragment = document.createDocumentFragment();
-    for (let i = 0; i < window.data.pinsCount; i++) {
-      fragment.appendChild(createPinsElement(pinsValue[i]));
-    }
-    mapPins.appendChild(fragment);
   };
 
   let errorHandler = (errorMessage) => {
@@ -78,9 +173,6 @@
   // Функция нажатия кнопки мыши
   let clickMouseButton = (click) => {
     if (typeof click === `object`) {
-      switch (click.button) {
-        case 0: turnOnPage();
-      }
       window.backend.load(successHandler, errorHandler);
     }
   };
@@ -90,9 +182,13 @@
   // Функция нажатия клавиши enter
   mapPinMain.addEventListener(`keydown`, (evt) => {
     if (evt.key === `Enter`) {
-      turnOnPage();
       window.backend.load(successHandler, errorHandler);
     }
+  });
+
+  housingTypeElement.addEventListener(`change`, () => {
+    let filteredOffers = window.filter.filterPins(offers);
+    renderOffers(filteredOffers);
   });
 
   window.map = {
