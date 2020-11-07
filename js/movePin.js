@@ -4,13 +4,15 @@
   let mapPinMain = window.map.mapPinMain;
   const PIN_SIZE_WIDTH = 62;
   const PIN_SIZE_HEIGHT = 72;
-  const MAX_HEIGHT = 630;
-  const MIN_HEIGHT = 130;
   const MAX_WIDTH = 1135 + (PIN_SIZE_WIDTH / 2);
   const MIN_WIDTH = 0 - (PIN_SIZE_WIDTH / 2);
+  const START_WIDTH = 600;
+  const MAX_HEIGHT = 630;
+  const MIN_HEIGHT = 130;
+  const START_HEIGHT = 450;
 
   let address = document.querySelector(`#address`);
-  address.value = 575 + `,` + 454;
+  address.value = START_WIDTH + `,` + START_HEIGHT;
 
   address.setAttribute(`readonly`, ``);
 
@@ -64,5 +66,14 @@
     document.addEventListener(`mousemove`, onMouseMove);
     document.addEventListener(`mouseup`, onMouseUp);
   });
+
+  let getPinStartPosition = () => {
+    mapPinMain.style.left = `${START_WIDTH}px`;
+    mapPinMain.style.top = `${START_HEIGHT}px`;
+  };
+
+  window.movepin ={
+    startPosition: getPinStartPosition,
+  };
 
 })();

@@ -13,6 +13,8 @@
   let avatar = document.querySelector(`#avatar`);
   let avatarsPreviewImg = document.querySelector(`ad-form-header__avatarsPreview img`);
 
+  const PIN_PREVIEW = `img/muffin-grey.svg`;
+
   // Валидация поля с количество мест
   let validateCapacity = (field) => {
     field.addEventListener(`change`, () => {
@@ -132,4 +134,19 @@
   setSameTime();
   validatePhoto(images, adFormPhoto);
   validatePhoto(avatar, avatarsPreviewImg);
+
+  let removeImage = () => {
+    avatarsPreviewImg.src = PIN_PREVIEW;
+    let typePhotos = avatarsPreviewImg.querySelectorAll(`img`);
+    if (typePhotos) {
+      typePhotos.forEach((item) => {
+        item.remove();
+      });
+    }
+  };
+
+  window.form ={
+    removeImage
+  };
+
 })();

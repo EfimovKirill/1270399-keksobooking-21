@@ -1,54 +1,83 @@
 'use strict';
 
-// (() => {
+(() => {
+  let successWindow = document.querySelector(`#success`).content.querySelector(`.success`);
+  let errorWindow = document.querySelector(`#error`).content.querySelector(`.error`);
+  let main = document.querySelector(`main`);
+  let reset = document.querySelector(`.ad-form__reset`);
 
-// Объявление переменных
-
-/*
-  const HOUSING_TYPES = [`palace`, `flat`, `house`, `bungalow`];
-  const TIMES = [`12:00`, `13:00`, `14:00`];
-  const SERVICES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
-  const PHOTOS = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
-
-  // Функция для создание случайного числа
-  let getRandomNumber = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
-
-  // Функция создание массива меток с объектами
-  let createPinsArray = (pinsCount) => {
-    let pins = [];
-    for (let i = 1; i <= pinsCount; i++) {
-      let pin = {
-        author: {
-          avatar: `img/avatars/user0` + i + `.png`
-        },
-        offer: {
-          title: `Жильё ` + i,
-          address: getRandomNumber(0, 601) + getRandomNumber(0, 601),
-          price: getRandomNumber(0, 5001),
-          type: HOUSING_TYPES[getRandomNumber(0, HOUSING_TYPES.length)],
-          rooms: getRandomNumber(0, 4),
-          guests: getRandomNumber(0, 4),
-          checkin: TIMES[getRandomNumber(0, TIMES.length)],
-          checkout: TIMES[getRandomNumber(0, TIMES.length)],
-          features: SERVICES.slice(0, getRandomNumber(0, SERVICES.length)),
-          description: `Опишите Ваше желье...`,
-          photos: PHOTOS.slice(0, getRandomNumber(0, PHOTOS.length))
-        },
-        location: {
-          x: getRandomNumber(0, 1201),
-          y: getRandomNumber(130, 631)
-        }
-      };
-      pins.push(pin);
+  let pressEsc = (evt, action) => {
+    if (evt.key === `Escape`) {
+      action();
     }
-    return pins;
   };
 
-  let arrayOfPins = createPinsArray(PINS_COUNT);
-  */
+  let closeSuccess = () => {
+    let success = document.querySelector(`.success`);
+    success.remove();
+    document.removeEventListener(`keydown`, onSuccessEscPress);
+  };
 
-// })();
+  let clickOnSuccess = () => {
+    closeSuccess();
+  };
 
+  let onSuccessEscPress = (evt) => {
+    pressEsc(evt, closeSuccess);
+  };
+
+  let onSuccess = () => {
+    main.insertAdjacentElement(`afterbegin`, successWindow);
+    successWindow.addEventListener(`click`, clickOnSuccess);
+    document.addEventListener(`keydown`, onSuccessEscPress);
+  };
+
+  let closeError = () => {
+    let error = document.querySelector(`.error`);
+    error.remove();
+    document.removeEventListener(`keydown`, onErrorEscPress);
+  };
+
+  let clickOnError = () => {
+    closeError();
+  };
+
+  let onErrorEscPress = () => {
+    pressEsc(evt, closeError);
+  };
+
+  let onError = () => {
+    main.insertAdjacentElement(`afterbegin`, errorWindow);
+    let closeErrorButton = document.querySelector(`.error__button`);
+    closeErrorButton.addEventListener(`click`, clickOnError)
+    errorWindow.addEventListener(`click`, clickOnError);
+    document.addEventListener(`keydown`, onErrorEscPress);
+  };
+
+  let deactivatePage = () => {
+    window.map.allMap.classList.add(`map--faded`);
+    window.map.deactivateForm();
+    window.map.removePin();
+    window.map.removeCard();
+    window.filter.deactivate();
+    window.movepin.startPosition();
+    window.form.removeImage();
+  };
+
+  let resetButton = () => {
+    evt.preventDefault();
+    deactivatePage();
+  };
+
+  reset.addEventListener(`click`, resetButton);
+
+  let submitSuccess =() => {
+    onSuccess();
+    deactivatePage();
+  };
+
+  window.map.adForm.addEventListener(`submit`, (evt) => {
+    window.backend.upload(submitSuccess, onError, new FormData(window.map.adForm));
+    evt.preventDefault();
+  });
+})();
