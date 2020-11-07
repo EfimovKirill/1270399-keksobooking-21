@@ -2,6 +2,7 @@
 
 (() => {
   let housingType = document.querySelector(`#housing-type`);
+  let filters = document.querySelector(`.map__filters`);
 
   let filterPins = (arrayOfPins) => {
     return housingType.value === `any` ? arrayOfPins : arrayOfPins.filter((element) => element.offer.type === housingType.value);
@@ -12,6 +13,7 @@
   };
 
   window.filter = {
+    filters,
     filterPins,
     deactivate
   };

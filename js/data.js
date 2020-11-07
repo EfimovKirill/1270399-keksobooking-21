@@ -42,14 +42,14 @@
     closeError();
   };
 
-  let onErrorEscPress = () => {
+  let onErrorEscPress = (evt) => {
     pressEsc(evt, closeError);
   };
 
   let onError = () => {
     main.insertAdjacentElement(`afterbegin`, errorWindow);
     let closeErrorButton = document.querySelector(`.error__button`);
-    closeErrorButton.addEventListener(`click`, clickOnError)
+    closeErrorButton.addEventListener(`click`, clickOnError);
     errorWindow.addEventListener(`click`, clickOnError);
     document.addEventListener(`keydown`, onErrorEscPress);
   };
@@ -64,14 +64,14 @@
     window.form.removeImage();
   };
 
-  let resetButton = () => {
+  let resetButton = (evt) => {
     evt.preventDefault();
     deactivatePage();
   };
 
   reset.addEventListener(`click`, resetButton);
 
-  let submitSuccess =() => {
+  let submitSuccess = () => {
     onSuccess();
     deactivatePage();
   };

@@ -145,7 +145,7 @@
     }
   };
 
-  window.form ={
+  window.form = {
     removeImage
   };
 

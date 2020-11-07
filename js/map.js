@@ -12,7 +12,7 @@
   let mapPins = map.querySelector(`.map__pins`);
   let mapPinsTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
   let adForm = document.querySelector(`.ad-form`);
-  let mapFiltersForm = document.querySelector(`.map__filters`);
+  let mapFiltersForm = window.filter.filters;
   let mapPinMain = document.querySelector(`.map__pin--main`);
   let housingTypeElement = document.querySelector(`#housing-type`);
   let fragment = document.createDocumentFragment();
@@ -96,8 +96,8 @@
     let targetPin = evt.target;
     let targetMap = targetPin.parentElement;
 
-    if ((targetMap.classList.contains('map__pin') && targetMap.classList.length === 1)
-      || (targetMap.classList.contains('map__pin') && targetMap.classList.length === 1)) {
+    if ((targetMap.classList.contains(`map__pin`) && targetMap.classList.length === 1)
+      || (targetMap.classList.contains(`map__pin`) && targetMap.classList.length === 1)) {
       let button = targetPin.closest(`.map__pin`);
       let offerIndex = button.dataset.offerIndex;
       let currentOffer = offers[offerIndex];
@@ -199,10 +199,10 @@
   };
 
   let removePin = () => {
-    let mapPinItems = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    let mapPinItems = document.querySelectorAll(`.map__pin:not(.map__pin--main)`);
     mapPinItems.forEach((item) => {
-        item.remove();
-      });
+      item.remove();
+    });
   };
 
   let removeCard = () => {
@@ -219,6 +219,6 @@
     deactivateForm,
     removePin,
     removeCard
-  }
+  };
 
 })();
