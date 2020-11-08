@@ -12,7 +12,7 @@
   let mapPins = map.querySelector(`.map__pins`);
   let mapPinsTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
   let adForm = document.querySelector(`.ad-form`);
-  let mapFiltersForm = document.querySelector(`.map__filters`);
+  let mapFiltersForm = window.filter.filters;
   let mapPinMain = document.querySelector(`.map__pin--main`);
   let housingTypeElement = document.querySelector(`#housing-type`);
   let fragment = document.createDocumentFragment();
@@ -93,18 +93,20 @@
   };
 
   mapPins.addEventListener(`click`, (evt) => {
-    let target = evt.target;
-    let button = target.closest(`.map__pin`);
-    if (button.classList.contains(`map__pin--main`)) {
-      return;
+    let targetPin = evt.target;
+    let targetMap = targetPin.parentElement;
+
+    if ((targetMap.classList.contains(`map__pin`) && targetMap.classList.length === 1)
+      || (targetMap.classList.contains(`map__pin`) && targetMap.classList.length === 1)) {
+      let button = targetPin.closest(`.map__pin`);
+      let offerIndex = button.dataset.offerIndex;
+      let currentOffer = offers[offerIndex];
+      let currentPopup = createCard(currentOffer);
+      openPopup(currentPopup);
+      let closeCard = document.querySelector(`.popup__close`);
+      closeCard.addEventListener(`click`, closePopup);
+      document.addEventListener(`keydown`, onPopupEscPress);
     }
-    let offerIndex = button.dataset.offerIndex;
-    let currentOffer = offers[offerIndex];
-    let currentPopup = createCard(currentOffer);
-    openPopup(currentPopup);
-    let closeCard = document.querySelector(`.popup__close`);
-    closeCard.addEventListener(`click`, closePopup);
-    document.addEventListener(`keydown`, onPopupEscPress);
   });
 
   // Функция, открывающая попап
@@ -191,8 +193,32 @@
     renderOffers(filteredOffers);
   });
 
+  let deactivateForm = () => {
+    turnOffPage();
+    adForm.reset();
+  };
+
+  let removePin = () => {
+    let mapPinItems = document.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+    mapPinItems.forEach((item) => {
+      item.remove();
+    });
+  };
+
+  let removeCard = () => {
+    let mapCard = map.querySelector(`.map__card`);
+    if (mapCard) {
+      mapCard.remove();
+    }
+  };
+
   window.map = {
-    mapPinMain
+    mapPinMain,
+    adForm,
+    allMap: map,
+    deactivateForm,
+    removePin,
+    removeCard
   };
 
 })();
