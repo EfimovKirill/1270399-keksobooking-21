@@ -77,7 +77,13 @@
   };
 
   window.map.adForm.addEventListener(`submit`, (evt) => {
-    window.backend.upload(submitSuccess, onError, new FormData(window.map.adForm));
+    window.form.validateCapacity();
+
+    let isCapacityValid = window.form.capacity.validity.valid;
+
+    if (isCapacityValid) {
+      window.backend.upload(submitSuccess, onError, new FormData(window.map.adForm));
+    }
     evt.preventDefault();
   });
 })();

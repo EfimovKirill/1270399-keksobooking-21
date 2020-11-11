@@ -1,9 +1,8 @@
 'use strict';
 
 (() => {
-  // Поиск элементов
   let roomsNumber = document.querySelector(`#room_number`);
-  let сapacity = document.querySelector(`#capacity`);
+  let capacity = document.querySelector(`#capacity`);
   let type = document.querySelector(`#type`);
   let price = document.querySelector(`#price`);
   let timeIn = document.querySelector(`#timein`);
@@ -15,18 +14,17 @@
 
   const PIN_PREVIEW = `img/muffin-grey.svg`;
 
-  // Валидация поля с количество мест
-  let validateCapacity = (field) => {
-    field.addEventListener(`change`, () => {
-      if (roomsNumber.value < сapacity.value) {
-        сapacity.setCustomValidity(`Слишком много гостей`);
-      } else {
-        сapacity.setCustomValidity(``);
-      }
-    });
+  let validateCapacity = () => {
+    if (roomsNumber.value < capacity.value) {
+       capacity.setCustomValidity(`Слишком много гостей`);
+    } else {
+      capacity.setCustomValidity(``);
+    }
+
+    capacity.reportValidity();
+    roomsNumber.reportValidity();
   };
 
-  // Валидация заголовка объявления
   let validateTitle = () => {
     let title = document.querySelector(`#title`);
 
@@ -39,20 +37,19 @@
       title.setCustomValidity(``);
     }
 
-    title.addEventListener(`input`, () => {
-      let titleValueLength = title.value.length;
+    let titleValueLength = title.value.length;
 
-      if (titleValueLength < MIN_TITLE_LENGTH) {
-        title.setCustomValidity(`Добавьте ${MIN_TITLE_LENGTH - titleValueLength} символа`);
-      } else if (titleValueLength > MAX_TITLE_LENGTH) {
-        title.setCustomValidity(`Удалите ${titleValueLength - MAX_TITLE_LENGTH} символа`);
-      } else {
-        title.setCustomValidity(``);
-      }
-    });
+    if (titleValueLength < MIN_TITLE_LENGTH) {
+      title.setCustomValidity(`Добавьте ${MIN_TITLE_LENGTH - titleValueLength} символа`);
+    } else if (titleValueLength > MAX_TITLE_LENGTH) {
+      title.setCustomValidity(`Удалите ${titleValueLength - MAX_TITLE_LENGTH} символа`);
+    } else {
+      title.setCustomValidity(``);
+    }
+
+    title.reportValidity();
   };
 
-  // Валидация цены на жилье
   let validatePrice = () => {
     let minPrice = 1000;
     const MAX_PRICE = 1000000;
@@ -63,26 +60,23 @@
       price.setCustomValidity(``);
     }
 
-    type.addEventListener(`change`, () => {
-      switch (type.value) {
-        case `flat`:
-          minPrice = 1000;
-          break;
-        case `bungalow`:
-          minPrice = 0;
-          break;
-        case `house`:
-          minPrice = 5000;
-          break;
-        case `palace`:
-          minPrice = 10000;
-          break;
-        default:
-          minPrice = 0;
+    switch (type.value) {
+      case `flat`:
+        minPrice = 1000;
+        break;
+      case `bungalow`:
+        minPrice = 0;
+        break;
+      case `house`:
+        minPrice = 5000;
+        break;
+      case `palace`:
+        minPrice = 10000;
+        break;
+      default:
+        minPrice = 0;
       }
-    });
 
-    price.addEventListener(`input`, () => {
       price.setCustomValidity(``);
       if (price.value < minPrice) {
         price.setCustomValidity(`Слишком дешево`);
@@ -91,21 +85,10 @@
       } else {
         price.setCustomValidity(``);
       }
-    });
+
+      price.reportValidity();
   };
 
-  // Установка одинакого времени
-  let setSameTime = () => {
-    timeIn.addEventListener(`change`, () => {
-      timeOut.value = timeIn.value;
-    });
-
-    timeOut.addEventListener(`change`, () => {
-      timeIn.value = timeOut.value;
-    });
-  };
-
-  // Валидация фото
   let validatePhoto = (usersAvatar, avatarsPreview) => {
     const IMAGE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
 
@@ -125,13 +108,24 @@
         reader.readAsDataURL(file);
       }
     });
+
+    usersAvatar.reportValidity();
   };
 
-  validateCapacity(сapacity);
-  validateCapacity(roomsNumber);
-  validateTitle();
-  validatePrice();
-  setSameTime();
+  capacity.addEventListener(`change`, validateCapacity);
+  roomsNumber.addEventListener(`change`, validateCapacity);
+  title.addEventListener(`input`, validateTitle);
+  type.addEventListener(`change`, validatePrice);
+  price.addEventListener(`input`, validatePrice);
+
+  timeIn.addEventListener(`change`, () => {
+    timeOut.value = timeIn.value;
+  });
+
+  timeOut.addEventListener(`change`, () => {
+    timeIn.value = timeOut.value;
+  });
+
   validatePhoto(images, adFormPhoto);
   validatePhoto(avatar, avatarsPreviewImg);
 
@@ -146,7 +140,9 @@
   };
 
   window.form = {
-    removeImage
+    removeImage,
+    validateCapacity,
+    capacity
   };
 
 })();
