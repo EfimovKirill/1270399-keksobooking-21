@@ -4,10 +4,13 @@
   const PIN_WIDTH = 40;
   const PIN_HEIGHT = 40;
   const PINS_COUNT_DEFAULT = 5;
+  const DEFAULT_FILTER_TYPE = 'any';
+  const MIN_PRICE = 10000;
+  const MAX_PRICE = 50000;
 
   let generateId = (prefix) => {
-    return `${prefix}-${(~~(Math.random() * 1e8)).toString(16)}`;
-  };
+    return `${prefix}-${(~~(Math.random()*1e8)).toString(16)}`;
+  }
 
   let rusHouseType = {
     flat: `Квартира`,
@@ -22,13 +25,13 @@
   let mapPins = map.querySelector(`.map__pins`);
   let mapPinsTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
   let adForm = document.querySelector(`.ad-form`);
-  let mapFiltersForm = window.filter.filters;
+  let mapFiltersForm = document.querySelector(`.map__filters`);
   let mapPinMain = document.querySelector(`.map__pin--main`);
-  let housingTypeElement = window.filter.type;
-  let housingPriceElement = window.filter.price;
-  let housingRoomsElement = window.filter.rooms;
-  let housingGuestsElement = window.filter.guests;
-  let housingFeaturesElement = window.filter.features;
+  let housingTypeElement = document.querySelector(`#housing-type`);
+  let housingPriceElement = document.querySelector(`#housing-price`);
+  let housingRoomsElement = document.querySelector(`#housing-rooms`);
+  let housingGuestsElement = document.querySelector(`#housing-guests`);
+  let housingFeaturesElement = document.querySelector(`#housing-features`);
   let fragment = document.createDocumentFragment();
   let cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
   let mapFiltersContainer = map.querySelector(`.map__filters-container`);
@@ -36,7 +39,7 @@
 
   let successHandler = (data) => {
     offers = data.map((item) => {
-      item.id = generateId(`offer`);
+      item.id = generateId('offer');
 
       return item;
     });
@@ -199,51 +202,49 @@
     }
   });
 
-  let filteredOffers = [];
-
-  // let debounceFilter = window.debounce((filterCallback) => {
-  //   filteredOffers = filterCallback(offers);
-  //   renderOffers(filteredOffers);
-  // })
-
-  // housingTypeElement.addEventListener(`change`, () => {
-  //   debounceFilter(window.filter.filterType);
-  // });
-
-  // housingPriceElement.addEventListener(`change`, () => {
-  //   debounceFilter(window.filter.filterPrice);
-  // });
-
-  // housingRoomsElement.addEventListener(`change`, () => {
-  //   debounceFilter(window.filter.filterRooms);
-  // });
-
-  // housingGuestsElement.addEventListener(`change`, () => {
-  //   debounceFilter(window.filter.filterGuests);
-  // });
-
-  // housingFeaturesElement.addEventListener(`change`, () => {
-  //   debounceFilter(window.filter.filterFeatures);
-  // });
-
-  let filterOffers = () => {
-    filteredOffers = offers.slice();
-
-    window.filter.filterType();
-    window.filter.filterPrice();
-    window.filter.filterRooms();
-    window.filter.filterGuests();
-    window.filter.filterFeatures();
-
-    let popup = document.querySelector(`.popup`);
-    if (popup) {
-      popup.remove();
+  const checkPrice = function (offer) {
+    switch (housingPriceElement.value) {
+      case `any`:
+        return true;
+      case `low`:
+        return (offer.offer.price < MIN_PRICE);
+      case `middle`:
+        return (offer.offer.price >= MIN_PRICE) && (offer.offer.price <= MAX_PRICE);
+      case `high`:
+        return (offer.offer.price > MAX_PRICE);
+      default:
+        return offer === housingPriceElement.value;
     }
-    renderOffers(filteredOffers);
   };
 
+  const checkFeatures = function () {
+    return Array.from(housingFeaturesElement.querySelectorAll(`input:checked`)).map(function (feature) {
+      return feature.value;
+    });
+  };
+
+  const filterOffers = (dataOffers) => {
+    return dataOffers
+      .filter(function (offer) {
+        let isOfferFit = !!(offer.offer);
+        let isTypeFit = housingTypeElement.value === DEFAULT_FILTER_TYPE ? true : offer.offer.type === housingTypeElement.value;
+        let isPriceFit = checkPrice(offer);
+        let isRoomsFit = housingRoomsElement.value === DEFAULT_FILTER_TYPE ? true : offer.offer.rooms === +housingRoomsElement.value;
+        let isGuestsFit = housingGuestsElement.value === DEFAULT_FILTER_TYPE ? true : offer.offer.guests === +housingGuestsElement.value;
+        let isFeaturesFit = checkFeatures().every(function (feature) {
+          return offer.offer.features.includes(feature);
+        });
+        return isOfferFit && isTypeFit && isPriceFit && isRoomsFit && isGuestsFit && isFeaturesFit;
+      }).slice(0, PINS_COUNT_DEFAULT);
+  }
+
+  const onFilterChange = window.debounce.debounce(() => {
+    const filteredElements = filterOffers(offers);
+    renderOffers(filteredElements);
+  });
+
   mapFiltersForm.addEventListener(`change`, () => {
-    window.debounce(filterOffers);
+    onFilterChange();
   });
 
   let deactivateForm = () => {
@@ -265,13 +266,18 @@
     }
   };
 
+  let deactivateFilter = () => {
+    mapFiltersForm.reset();
+  };
+
   window.map = {
     mapPinMain,
     adForm,
     allMap: map,
     deactivateForm,
     removePin,
-    removeCard
+    removeCard,
+    deactivateFilter
   };
 
 })();
