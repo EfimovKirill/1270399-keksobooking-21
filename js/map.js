@@ -202,7 +202,7 @@
     }
   });
 
-  const checkPrice = function (offer) {
+  let checkPrice = (offer) => {
     switch (housingPriceElement.value) {
       case `any`:
         return true;
@@ -217,9 +217,7 @@
     }
   };
 
-  let checkFeatures = () => Array.from(housingFeaturesElement.querySelectorAll(`input:checked`)).map(function (feature) {
-    return feature.value;
-  });
+  let checkFeatures = () => Array.from(housingFeaturesElement.querySelectorAll(`input:checked`)).map((feature) => feature.value);
 
   let filterOffers = (dataOffers) => {
     return dataOffers
