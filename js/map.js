@@ -5,27 +5,44 @@
   const PIN_HEIGHT = 40;
   const PINS_COUNT_DEFAULT = 5;
 
+  let generateId = (prefix) => {
+    return `${prefix}-${(~~(Math.random()*1e8)).toString(16)}`;
+  }
+
+  let rusHouseType = {
+    flat: `Квартира`,
+    bungalow: `Бунгало`,
+    house: `Дом`,
+    palace: `Дворец`
+  };
+
   let offers = [];
 
-  // Поиск элементов
   let map = document.querySelector(`.map`);
   let mapPins = map.querySelector(`.map__pins`);
   let mapPinsTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
   let adForm = document.querySelector(`.ad-form`);
   let mapFiltersForm = window.filter.filters;
   let mapPinMain = document.querySelector(`.map__pin--main`);
-  let housingTypeElement = document.querySelector(`#housing-type`);
+  let housingTypeElement = window.filter.type;
+  let housingPriceElement = window.filter.price;
+  let housingRoomsElement = window.filter.rooms;
+  let housingGuestsElement = window.filter.guests;
+  let housingFeaturesElement = window.filter.features;
   let fragment = document.createDocumentFragment();
   let cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
   let mapFiltersContainer = map.querySelector(`.map__filters-container`);
   let pinsContainer = document.createElement(`div`);
 
   let successHandler = (data) => {
-    offers = [...data];
+    offers = data.map((item) => {
+      item.id = generateId('offer');
+
+      return item;
+    });
     turnOnPage();
   };
 
-  // Функция, создающая метку
   let createPinsElement = (pinValue) => {
     let pinElement = mapPinsTemplate.cloneNode(true);
 
@@ -43,11 +60,12 @@
     card.querySelector(`.popup__title`).textContent = element.offer.title;
     card.querySelector(`.popup__text--address`).textContent = element.offer.address;
     card.querySelector(`.popup__text--price`).textContent = `${element.offer.price} ₽/ночь`;
-    card.querySelector(`.popup__type`).textContent = element.offer.type;
+    card.querySelector(`.popup__type`).textContent = rusHouseType[element.offer.type];
     card.querySelector(`.popup__text--capacity`).textContent = `${element.offer.rooms} комнаты для ${element.offer.guests}`;
     card.querySelector(`.popup__text--time`).textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}`;
 
     let popupFeatures = card.querySelector(`.popup__features`);
+    popupFeatures.innerHTML = ``;
     element.offer.features.forEach((el) => {
       let popupFeatureItem = document.createElement(`li`);
       popupFeatureItem.className = `popup__feature popup__feature--${el}`;
@@ -70,7 +88,6 @@
     return card;
   };
 
-  // Функция, отрисовывающая попап
   let renderOffers = (arrayOfPins) => {
     let pinsCount = arrayOfPins.length > PINS_COUNT_DEFAULT ? PINS_COUNT_DEFAULT : arrayOfPins.length;
 
@@ -78,7 +95,7 @@
 
     for (let i = 0; i < pinsCount; i++) {
       let pin = createPinsElement(arrayOfPins[i]);
-      pin.dataset.offerIndex = i;
+      pin.dataset.offerId = arrayOfPins[i].id;
       fragment.appendChild(pin);
     }
 
@@ -99,8 +116,8 @@
     if ((targetMap.classList.contains(`map__pin`) && targetMap.classList.length === 1)
       || (targetMap.classList.contains(`map__pin`) && targetMap.classList.length === 1)) {
       let button = targetPin.closest(`.map__pin`);
-      let offerIndex = button.dataset.offerIndex;
-      let currentOffer = offers[offerIndex];
+      let offerId = button.dataset.offerId;
+      let currentOffer = offers.find((offer) => offer.id === offerId);
       let currentPopup = createCard(currentOffer);
       openPopup(currentPopup);
       let closeCard = document.querySelector(`.popup__close`);
@@ -109,7 +126,6 @@
     }
   });
 
-  // Функция, открывающая попап
   let openPopup = (popup) => {
     let mapCard = map.querySelector(`.map__card`);
     if (mapCard) {
@@ -125,15 +141,13 @@
     document.removeEventListener(`keydown`, onPopupEscPress);
   };
 
-  // Функция для отключения поля
   let disabledFieldSets = (form, booleanValue) => {
     let fieldSets = form.children;
-    for (let i = 0; i < fieldSets.length - 1; i++) {
+    for (let i = 0; i < fieldSets.length; i++) {
       fieldSets[i].disabled = booleanValue;
     }
   };
 
-  // Деактивация страницы
   let turnOffPage = () => {
     map.classList.add(`map--faded`);
     adForm.classList.add(`ad-form--disabled`);
@@ -145,7 +159,6 @@
 
   turnOffPage();
 
-  // Активация страницы
   let turnOnPage = () => {
     if (map.classList.contains(`map--faded`)) {
       renderOffers(offers);
@@ -172,7 +185,6 @@
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
-  // Функция нажатия кнопки мыши
   let clickMouseButton = (click) => {
     if (typeof click === `object`) {
       window.backend.load(successHandler, errorHandler);
@@ -181,16 +193,57 @@
 
   mapPinMain.addEventListener(`mousedown`, clickMouseButton);
 
-  // Функция нажатия клавиши enter
   mapPinMain.addEventListener(`keydown`, (evt) => {
     if (evt.key === `Enter`) {
       window.backend.load(successHandler, errorHandler);
     }
   });
 
-  housingTypeElement.addEventListener(`change`, () => {
-    let filteredOffers = window.filter.filterPins(offers);
+  let filteredOffers = [];
+
+  // let debounceFilter = window.debounce((filterCallback) => {
+  //   filteredOffers = filterCallback(offers);
+  //   renderOffers(filteredOffers);
+  // })
+
+  // housingTypeElement.addEventListener(`change`, () => {
+  //   debounceFilter(window.filter.filterType);
+  // });
+
+  // housingPriceElement.addEventListener(`change`, () => {
+  //   debounceFilter(window.filter.filterPrice);
+  // });
+
+  // housingRoomsElement.addEventListener(`change`, () => {
+  //   debounceFilter(window.filter.filterRooms);
+  // });
+
+  // housingGuestsElement.addEventListener(`change`, () => {
+  //   debounceFilter(window.filter.filterGuests);
+  // });
+
+  // housingFeaturesElement.addEventListener(`change`, () => {
+  //   debounceFilter(window.filter.filterFeatures);
+  // });
+
+  let filterOffers = () => {
+    filteredOffers = offers.slice();
+
+    window.filter.filterType();
+    window.filter.filterPrice();
+    window.filter.filterRooms();
+    window.filter.filterGuests();
+    window.filter.filterFeatures();
+
+    let popup = document.querySelector(`.popup`);
+    if (popup) {
+      popup.remove();
+    }
     renderOffers(filteredOffers);
+  };
+
+  mapFiltersForm.addEventListener(`change`, () => {
+    debounce(filterOffers);
   });
 
   let deactivateForm = () => {

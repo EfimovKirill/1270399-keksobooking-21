@@ -7,12 +7,14 @@
   const MAX_WIDTH = 1135 + (PIN_SIZE_WIDTH / 2);
   const MIN_WIDTH = 0 - (PIN_SIZE_WIDTH / 2);
   const START_WIDTH = 600 - (PIN_SIZE_WIDTH / 2);
+  const START_WIDTH_VALUE = 600
   const MAX_HEIGHT = 630;
   const MIN_HEIGHT = 130;
   const START_HEIGHT = 303 + PIN_SIZE_HEIGHT;
+  const START_HEIGHT_VALUE = 447;
 
   let address = document.querySelector(`#address`);
-  address.value = START_WIDTH + `,` + START_HEIGHT;
+  address.value = START_WIDTH_VALUE + `,` + START_HEIGHT_VALUE;
 
   address.setAttribute(`readonly`, ``);
 
@@ -72,8 +74,13 @@
     mapPinMain.style.top = `${START_HEIGHT}px`;
   };
 
+  let setStartCoordinates = () => {
+    return address.value = START_WIDTH_VALUE + `,` + START_HEIGHT_VALUE;
+  };
+
   window.movepin = {
     startPosition: getPinStartPosition,
+    setStartCoordinates
   };
 
 })();
