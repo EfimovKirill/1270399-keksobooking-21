@@ -59,7 +59,7 @@
     window.map.deactivateForm();
     window.map.removePin();
     window.map.removeCard();
-    window.filter.deactivate();
+    window.map.deactivateFilter();
     window.movepin.startPosition();
     window.form.removeImage();
     window.movepin.setStartCoordinates();

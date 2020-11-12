@@ -4,7 +4,7 @@
 (() => {
   const DEBOUNCE_INTERVAL = 500;
 
-  window.debounce = (cb) => {
+  let debounce = (cb) => {
     let lastTimeout = null;
 
     return (...parameters) => {
@@ -16,5 +16,9 @@
         cb(...parameters);
       }, DEBOUNCE_INTERVAL);
     };
+  };
+
+  window.debounce = {
+    debounce
   };
 })();

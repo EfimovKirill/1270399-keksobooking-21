@@ -7,7 +7,7 @@
   const MAX_WIDTH = 1135 + (PIN_SIZE_WIDTH / 2);
   const MIN_WIDTH = 0 - (PIN_SIZE_WIDTH / 2);
   const START_WIDTH = 600 - (PIN_SIZE_WIDTH / 2);
-  const START_WIDTH_VALUE = 600
+  const START_WIDTH_VALUE = 600;
   const MAX_HEIGHT = 630;
   const MIN_HEIGHT = 130;
   const START_HEIGHT = 303 + PIN_SIZE_HEIGHT;
@@ -75,7 +75,7 @@
   };
 
   let setStartCoordinates = () => {
-    return address.value = START_WIDTH_VALUE + `,` + START_HEIGHT_VALUE;
+    address.value = START_WIDTH_VALUE + `,` + START_HEIGHT_VALUE;
   };
 
   window.movepin = {
