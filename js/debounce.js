@@ -20,5 +20,5 @@
 
   window.debounce = {
     debounce
-  }
+  };
 })();
