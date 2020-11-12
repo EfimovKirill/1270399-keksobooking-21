@@ -222,14 +222,14 @@
   let filterOffers = (dataOffers) => {
     return dataOffers
       .filter((offer) => {
-          let isOfferFit = !!(offer.offer);
-          let isTypeFit = housingTypeElement.value === DEFAULT_FILTER_TYPE ? true : offer.offer.type === housingTypeElement.value;
-          let isPriceFit = checkPrice(offer);
-          let isRoomsFit = housingRoomsElement.value === DEFAULT_FILTER_TYPE ? true : offer.offer.rooms === +housingRoomsElement.value;
-          let isGuestsFit = housingGuestsElement.value === DEFAULT_FILTER_TYPE ? true : offer.offer.guests === +housingGuestsElement.value;
-          let isFeaturesFit = checkFeatures().every((feature) => offer.offer.features.includes(feature));
-          return isOfferFit && isTypeFit && isPriceFit && isRoomsFit && isGuestsFit && isFeaturesFit;
-        }).slice(0, PINS_COUNT_DEFAULT);
+        let isOfferFit = !!(offer.offer);
+        let isTypeFit = housingTypeElement.value === DEFAULT_FILTER_TYPE ? true : offer.offer.type === housingTypeElement.value;
+        let isPriceFit = checkPrice(offer);
+        let isRoomsFit = housingRoomsElement.value === DEFAULT_FILTER_TYPE ? true : offer.offer.rooms === +housingRoomsElement.value;
+        let isGuestsFit = housingGuestsElement.value === DEFAULT_FILTER_TYPE ? true : offer.offer.guests === +housingGuestsElement.value;
+        let isFeaturesFit = checkFeatures().every((feature) => offer.offer.features.includes(feature));
+        return isOfferFit && isTypeFit && isPriceFit && isRoomsFit && isGuestsFit && isFeaturesFit;
+      }).slice(0, PINS_COUNT_DEFAULT);
   };
 
   let onFilterChange = window.debounce.debounce(() => {
