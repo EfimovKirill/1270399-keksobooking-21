@@ -5,6 +5,10 @@
   const PIN_HEIGHT = 40;
   const PINS_COUNT_DEFAULT = 5;
 
+  let generateId = (prefix) => {
+    return `${prefix}-${(~~(Math.random()*1e8)).toString(16)}`;
+  }
+
   let rusHouseType = {
     flat: `Квартира`,
     bungalow: `Бунгало`,
@@ -31,7 +35,11 @@
   let pinsContainer = document.createElement(`div`);
 
   let successHandler = (data) => {
-    offers = [...data];
+    offers = data.map((item) => {
+      item.id = generateId('offer');
+
+      return item;
+    });
     turnOnPage();
   };
 
@@ -87,7 +95,7 @@
 
     for (let i = 0; i < pinsCount; i++) {
       let pin = createPinsElement(arrayOfPins[i]);
-      pin.dataset.offerIndex = i;
+      pin.dataset.offerId = arrayOfPins[i].id;
       fragment.appendChild(pin);
     }
 
@@ -108,8 +116,8 @@
     if ((targetMap.classList.contains(`map__pin`) && targetMap.classList.length === 1)
       || (targetMap.classList.contains(`map__pin`) && targetMap.classList.length === 1)) {
       let button = targetPin.closest(`.map__pin`);
-      let offerIndex = button.dataset.offerIndex;
-      let currentOffer = offers[offerIndex];
+      let offerId = button.dataset.offerId;
+      let currentOffer = offers.find((offer) => offer.id === offerId);
       let currentPopup = createCard(currentOffer);
       openPopup(currentPopup);
       let closeCard = document.querySelector(`.popup__close`);
@@ -193,29 +201,49 @@
 
   let filteredOffers = [];
 
-  housingTypeElement.addEventListener(`change`, () => {
-    filteredOffers = window.filter.filterType(offers);
-    renderOffers(filteredOffers);
-  });
+  // let debounceFilter = window.debounce((filterCallback) => {
+  //   filteredOffers = filterCallback(offers);
+  //   renderOffers(filteredOffers);
+  // })
 
-  housingPriceElement.addEventListener(`change`, () => {
-    filteredOffers = window.filter.filterPrice(offers);
-    renderOffers(filteredOffers);
-  });
+  // housingTypeElement.addEventListener(`change`, () => {
+  //   debounceFilter(window.filter.filterType);
+  // });
 
-  housingRoomsElement.addEventListener(`change`, () => {
-    filteredOffers = window.filter.filterRooms(offers);
-    renderOffers(filteredOffers);
-  });
+  // housingPriceElement.addEventListener(`change`, () => {
+  //   debounceFilter(window.filter.filterPrice);
+  // });
 
-  housingGuestsElement.addEventListener(`change`, () => {
-    filteredOffers = window.filter.filterGuests(offers);
-    renderOffers(filteredOffers);
-  });
+  // housingRoomsElement.addEventListener(`change`, () => {
+  //   debounceFilter(window.filter.filterRooms);
+  // });
 
-  housingFeaturesElement.addEventListener(`change`, () => {
-    filteredOffers = window.filter.filterFeatures(offers);
+  // housingGuestsElement.addEventListener(`change`, () => {
+  //   debounceFilter(window.filter.filterGuests);
+  // });
+
+  // housingFeaturesElement.addEventListener(`change`, () => {
+  //   debounceFilter(window.filter.filterFeatures);
+  // });
+
+  let filterOffers = () => {
+    filteredOffers = offers.slice();
+
+    window.filter.filterType();
+    window.filter.filterPrice();
+    window.filter.filterRooms();
+    window.filter.filterGuests();
+    window.filter.filterFeatures();
+
+    let popup = document.querySelector(`.popup`);
+    if (popup) {
+      popup.remove();
+    }
     renderOffers(filteredOffers);
+  };
+
+  mapFiltersForm.addEventListener(`change`, () => {
+    debounce(filterOffers);
   });
 
   let deactivateForm = () => {

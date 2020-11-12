@@ -7,14 +7,13 @@
   window.debounce = (cb) => {
     let lastTimeout = null;
 
-    return () => {
-      let parameters = `arguments`;
+    return (...parameters) => {
       if (lastTimeout) {
         window.clearTimeout(lastTimeout);
       }
 
       lastTimeout = window.setTimeout(() => {
-        cb.spread(null, parameters);
+        cb(...parameters);
       }, DEBOUNCE_INTERVAL);
     };
   };

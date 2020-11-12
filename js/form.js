@@ -10,7 +10,7 @@
   let images = document.querySelector(`#images`);
   let adFormPhoto = document.querySelector(`.ad-form__photo`);
   let avatar = document.querySelector(`#avatar`);
-  let avatarsPreviewImg = document.querySelector(`ad-form-header__avatarsPreview img`);
+  let avatarsPreviewImg = document.querySelector(`.ad-form-header__preview img`);
 
   const PIN_PREVIEW = `img/muffin-grey.svg`;
 

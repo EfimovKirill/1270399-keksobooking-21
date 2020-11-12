@@ -62,6 +62,7 @@
     window.filter.deactivate();
     window.movepin.startPosition();
     window.form.removeImage();
+    window.movepin.setStartCoordinates();
   };
 
   let resetButton = (evt) => {

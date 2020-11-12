@@ -74,8 +74,13 @@
     mapPinMain.style.top = `${START_HEIGHT}px`;
   };
 
+  let setStartCoordinates = () => {
+    return address.value = START_WIDTH_VALUE + `,` + START_HEIGHT_VALUE;
+  };
+
   window.movepin = {
     startPosition: getPinStartPosition,
+    setStartCoordinates
   };
 
 })();

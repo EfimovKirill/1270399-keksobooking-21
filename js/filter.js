@@ -13,21 +13,27 @@
   };
 
   let filterPrice = (arrayOfPins) => {
-    if (price.value === `any`) {
-      arrayOfPins = arrayOfPins.filter((element) => {
-        let cost = {
-          middle: (elementPrice) => {
-            return elementPrice >= 10000 && elementPrice < 50000;
-          },
-          low: (elementPrice) => {
-            return elementPrice < 10000;
-          },
-          high: (elementPrice) => {
-            return elementPrice >= 50000;
-          }
-        };
-        return cost[price.value](element.offer.price);
-      });
+    switch (price.value) {
+      case 'low':
+        return arrayOfPins.filter((offerEl) => {
+          let price = offerEl.offer.price;
+
+          return price < 10000;
+        });
+      case 'middle':
+        return arrayOfPins.filter((offerEl) => {
+          let price = offerEl.offer.price;
+
+          return price >= 10000 && price < 50000;
+        });
+      case 'high':
+        return arrayOfPins.filter((offerEl) => {
+          let price = offerEl.offer.price;
+
+          return price >= 50000;
+        });
+      default:
+        return arrayOfPins;
     }
   };
 
@@ -44,10 +50,12 @@
     .map((element) => element.value);
 
     if (checkboxes.length > 0) {
-      arrayOfPins = arrayOfPins.filter((pin) => {
+      return arrayOfPins.filter((pin) => {
         return checkboxes.every((checked) => pin.offer.features.indexOf(checked) !== -1);
       });
     }
+
+    return arrayOfPins;
   };
 
   let deactivate = () => {
