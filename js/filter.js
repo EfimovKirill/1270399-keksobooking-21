@@ -14,19 +14,19 @@
 
   let filterPrice = (arrayOfPins) => {
     switch (price.value) {
-      case 'low':
+      case `low`:
         return arrayOfPins.filter((offerEl) => {
           let price = offerEl.offer.price;
 
           return price < 10000;
         });
-      case 'middle':
+      case `middle`:
         return arrayOfPins.filter((offerEl) => {
           let price = offerEl.offer.price;
 
           return price >= 10000 && price < 50000;
         });
-      case 'high':
+      case `high`:
         return arrayOfPins.filter((offerEl) => {
           let price = offerEl.offer.price;
 

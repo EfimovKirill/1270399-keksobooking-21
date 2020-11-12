@@ -3,6 +3,7 @@
 (() => {
   let roomsNumber = document.querySelector(`#room_number`);
   let capacity = document.querySelector(`#capacity`);
+  let title = document.querySelector(`#title`);
   let type = document.querySelector(`#type`);
   let price = document.querySelector(`#price`);
   let timeIn = document.querySelector(`#timein`);
@@ -16,7 +17,7 @@
 
   let validateCapacity = () => {
     if (roomsNumber.value < capacity.value) {
-       capacity.setCustomValidity(`Слишком много гостей`);
+      capacity.setCustomValidity(`Слишком много гостей`);
     } else {
       capacity.setCustomValidity(``);
     }
@@ -26,7 +27,6 @@
   };
 
   let validateTitle = () => {
-    let title = document.querySelector(`#title`);
 
     const MIN_TITLE_LENGTH = 30;
     const MAX_TITLE_LENGTH = 100;
@@ -75,18 +75,18 @@
         break;
       default:
         minPrice = 0;
-      }
+    }
 
+    price.setCustomValidity(``);
+    if (price.value < minPrice) {
+      price.setCustomValidity(`Слишком дешево`);
+    } else if (price.value > MAX_PRICE) {
+      price.setCustomValidity(`Слишком дорого`);
+    } else {
       price.setCustomValidity(``);
-      if (price.value < minPrice) {
-        price.setCustomValidity(`Слишком дешево`);
-      } else if (price.value > MAX_PRICE) {
-        price.setCustomValidity(`Слишком дорого`);
-      } else {
-        price.setCustomValidity(``);
-      }
+    }
 
-      price.reportValidity();
+    price.reportValidity();
   };
 
   let validatePhoto = (usersAvatar, avatarsPreview) => {

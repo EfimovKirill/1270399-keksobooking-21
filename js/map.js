@@ -6,8 +6,8 @@
   const PINS_COUNT_DEFAULT = 5;
 
   let generateId = (prefix) => {
-    return `${prefix}-${(~~(Math.random()*1e8)).toString(16)}`;
-  }
+    return `${prefix}-${(~~(Math.random() * 1e8)).toString(16)}`;
+  };
 
   let rusHouseType = {
     flat: `Квартира`,
@@ -36,7 +36,7 @@
 
   let successHandler = (data) => {
     offers = data.map((item) => {
-      item.id = generateId('offer');
+      item.id = generateId(`offer`);
 
       return item;
     });
@@ -243,7 +243,7 @@
   };
 
   mapFiltersForm.addEventListener(`change`, () => {
-    debounce(filterOffers);
+    window.debounce(filterOffers);
   });
 
   let deactivateForm = () => {
