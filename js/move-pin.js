@@ -1,17 +1,18 @@
 'use strict';
 
 (() => {
-  let mapPinMain = window.map.mapPinMain;
   const PIN_SIZE_WIDTH = 62;
   const PIN_SIZE_HEIGHT = 72;
   const MAX_WIDTH = 1135 + (PIN_SIZE_WIDTH / 2);
   const MIN_WIDTH = 0 - (PIN_SIZE_WIDTH / 2);
   const START_WIDTH = 600 - (PIN_SIZE_WIDTH / 2);
   const START_WIDTH_VALUE = 600;
-  const MAX_HEIGHT = 630;
-  const MIN_HEIGHT = 130;
+  const MAX_HEIGHT = 631 - PIN_SIZE_HEIGHT;
+  const MIN_HEIGHT = 129 - PIN_SIZE_HEIGHT;
   const START_HEIGHT = 303 + PIN_SIZE_HEIGHT;
   const START_HEIGHT_VALUE = 447;
+
+  let mapPinMain = window.map.mapPinMain;
 
   let address = document.querySelector(`#address`);
   address.value = START_WIDTH_VALUE + `,` + START_HEIGHT_VALUE;
