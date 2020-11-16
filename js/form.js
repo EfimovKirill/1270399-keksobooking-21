@@ -69,19 +69,19 @@
 
     switch (type.value) {
       case `flat`:
-        minPrice = housingPrices.FLAT;
+        minPrice = HousingPrices.FLAT;
         price.placeholder = HousingPrices.FLAT;
         break;
       case `bungalow`:
-        minPrice = housingPrices.BUNGALO;
+        minPrice = HousingPrices.BUNGALO;
         price.placeholder = HousingPrices.BUNGALO;
         break;
       case `house`:
-        minPrice = housingPrices.HOUSE;
+        minPrice = HousingPrices.HOUSE;
         price.placeholder = HousingPrices.HOUSE;
         break;
       case `palace`:
-        minPrice = housingPrices.PALACE;
+        minPrice = HousingPrices.PALACE;
         price.placeholder = HousingPrices.PALACE;
         break;
       default:
