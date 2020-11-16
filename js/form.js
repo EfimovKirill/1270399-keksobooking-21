@@ -1,6 +1,18 @@
 'use strict';
 
 (() => {
+  const PIN_PREVIEW = `img/muffin-grey.svg`;
+  const MIN_TITLE_LENGTH = 30;
+  const MAX_TITLE_LENGTH = 100;
+  const MAX_PRICE = 1000000;
+  const IMAGE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
+  const HousingPrices = {
+    BUNGALO: 0,
+    FLAT: 1000,
+    HOUSE: 5000,
+    PALACE: 10000
+  };
+
   let roomsNumber = document.querySelector(`#room_number`);
   let capacity = document.querySelector(`#capacity`);
   let title = document.querySelector(`#title`);
@@ -13,23 +25,19 @@
   let avatar = document.querySelector(`#avatar`);
   let avatarsPreviewImg = document.querySelector(`.ad-form-header__preview img`);
 
-  const PIN_PREVIEW = `img/muffin-grey.svg`;
-
   let validateCapacity = () => {
-    if (roomsNumber.value < capacity.value) {
-      capacity.setCustomValidity(`Слишком много гостей`);
+    if ((roomsNumber.value === `100` && capacity.value !== `0`) || (roomsNumber.value !== `100` && capacity.value === `0`)) {
+      capacity.setCustomValidity(`Не для гостей!`);
+    } else if (roomsNumber.value < capacity.value) {
+      capacity.setCustomValidity(`Не подходит количество мест`);
     } else {
       capacity.setCustomValidity(``);
     }
 
     capacity.reportValidity();
-    roomsNumber.reportValidity();
   };
 
   let validateTitle = () => {
-
-    const MIN_TITLE_LENGTH = 30;
-    const MAX_TITLE_LENGTH = 100;
 
     if (title.validity.valueMissing) {
       title.setCustomValidity(`Обязательное поле!`);
@@ -51,8 +59,7 @@
   };
 
   let validatePrice = () => {
-    let minPrice = 1000;
-    const MAX_PRICE = 1000000;
+    let minPrice;
 
     if (price.validity.valueMissing) {
       price.setCustomValidity(`Обязательное поле!`);
@@ -62,16 +69,20 @@
 
     switch (type.value) {
       case `flat`:
-        minPrice = 1000;
+        minPrice = housingPrices.FLAT;
+        price.placeholder = HousingPrices.FLAT;
         break;
       case `bungalow`:
-        minPrice = 0;
+        minPrice = housingPrices.BUNGALO;
+        price.placeholder = HousingPrices.BUNGALO;
         break;
       case `house`:
-        minPrice = 5000;
+        minPrice = housingPrices.HOUSE;
+        price.placeholder = HousingPrices.HOUSE;
         break;
       case `palace`:
-        minPrice = 10000;
+        minPrice = housingPrices.PALACE;
+        price.placeholder = HousingPrices.PALACE;
         break;
       default:
         minPrice = 0;
@@ -90,7 +101,6 @@
   };
 
   let validatePhoto = (usersAvatar, avatarsPreview) => {
-    const IMAGE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
 
     usersAvatar.addEventListener(`change`, () => {
       let file = usersAvatar.files[0];

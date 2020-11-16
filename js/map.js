@@ -7,6 +7,7 @@
   const DEFAULT_FILTER_TYPE = `any`;
   const MIN_PRICE = 10000;
   const MAX_PRICE = 50000;
+  const LEFT_MOUSE_BUTTON = 0;
 
   let generateId = (prefix) => {
     return `${prefix}-${(~~(Math.random() * 1e8)).toString(16)}`;
@@ -116,8 +117,7 @@
     let targetPin = evt.target;
     let targetMap = targetPin.parentElement;
 
-    if ((targetMap.classList.contains(`map__pin`) && targetMap.classList.length === 1)
-      || (targetMap.classList.contains(`map__pin`) && targetMap.classList.length === 1)) {
+    if (targetMap.classList.contains(`map__pin`) && targetMap.classList.length === 1) {
       let button = targetPin.closest(`.map__pin`);
       let offerId = button.dataset.offerId;
       let currentOffer = offers.find((offer) => offer.id === offerId);
@@ -188,8 +188,8 @@
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
-  let clickMouseButton = (click) => {
-    if (typeof click === `object`) {
+  let clickMouseButton = (evt) => {
+    if (evt.button === LEFT_MOUSE_BUTTON && offers.length === 0) {
       window.backend.load(successHandler, errorHandler);
     }
   };
@@ -220,16 +220,40 @@
   let checkFeatures = () => Array.from(housingFeaturesElement.querySelectorAll(`input:checked`)).map((feature) => feature.value);
 
   let filterOffers = (dataOffers) => {
-    return dataOffers
-      .filter((offer) => {
+    let offersToFilter = [...dataOffers];
+    let filteredOffers = [];
+    let currentIndex = 0;
+
+    for (let i = 0; filteredOffers.length < 5; i++) {
+      let foundElement = offersToFilter.find((offer, index) => {
         let isOfferFit = !!(offer.offer);
         let isTypeFit = housingTypeElement.value === DEFAULT_FILTER_TYPE ? true : offer.offer.type === housingTypeElement.value;
         let isPriceFit = checkPrice(offer);
         let isRoomsFit = housingRoomsElement.value === DEFAULT_FILTER_TYPE ? true : offer.offer.rooms === +housingRoomsElement.value;
         let isGuestsFit = housingGuestsElement.value === DEFAULT_FILTER_TYPE ? true : offer.offer.guests === +housingGuestsElement.value;
         let isFeaturesFit = checkFeatures().every((feature) => offer.offer.features.includes(feature));
+        currentIndex = index;
+
         return isOfferFit && isTypeFit && isPriceFit && isRoomsFit && isGuestsFit && isFeaturesFit;
-      }).slice(0, PINS_COUNT_DEFAULT);
+      });
+
+      if (foundElement) {
+        filteredOffers.push(foundElement);
+        offersToFilter = offersToFilter.splice(currentIndex + 1);
+
+        if (filteredOffers.length === 5) {
+          break;
+        }
+      } else {
+        break;
+      }
+
+      if (i >= dataOffers.length - 1) {
+        break;
+      }
+    }
+
+    return filteredOffers;
   };
 
   let onFilterChange = window.debounce.debounce(() => {
