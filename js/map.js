@@ -140,8 +140,10 @@
 
   let closePopup = () => {
     let card = document.querySelector(`.popup`);
-    card.remove();
-    document.removeEventListener(`keydown`, onPopupEscPress);
+    if (card) {
+      card.remove();
+      document.removeEventListener(`keydown`, onPopupEscPress);
+    }
   };
 
   let disabledFieldSets = (form, booleanValue) => {
@@ -151,6 +153,10 @@
     }
   };
 
+  let clearOffersData = () => {
+    offers = [];
+  };
+
   let turnOffPage = () => {
     map.classList.add(`map--faded`);
     adForm.classList.add(`ad-form--disabled`);
@@ -158,6 +164,7 @@
 
     disabledFieldSets(adForm, true);
     disabledFieldSets(mapFiltersForm, true);
+    clearOffersData();
   };
 
   turnOffPage();
@@ -257,6 +264,7 @@
   };
 
   let onFilterChange = window.debounce.debounce(() => {
+    closePopup();
     let filteredElements = filterOffers(offers);
     renderOffers(filteredElements);
   });

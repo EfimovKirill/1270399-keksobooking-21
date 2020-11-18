@@ -60,9 +60,10 @@
     window.map.removePin();
     window.map.removeCard();
     window.map.deactivateFilter();
-    window.movepin.startPosition();
+    window.movePin.startPosition();
+    window.movePin.setStartCoordinates();
     window.form.removeImage();
-    window.movepin.setStartCoordinates();
+    window.form.resetPrice();
   };
 
   let resetButton = (evt) => {

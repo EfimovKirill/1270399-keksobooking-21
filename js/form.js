@@ -4,6 +4,7 @@
   const PIN_PREVIEW = `img/muffin-grey.svg`;
   const MIN_TITLE_LENGTH = 30;
   const MAX_TITLE_LENGTH = 100;
+  const DEFAULT_PRICE = 1000;
   const MAX_PRICE = 1000000;
   const IMAGE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
   const HousingPrices = {
@@ -58,6 +59,11 @@
     title.reportValidity();
   };
 
+  let setMinPrice = (minPrice) => {
+    price.placeholder = minPrice;
+    price.setAttribute('min', minPrice);
+  }
+
   let validatePrice = () => {
     let minPrice;
 
@@ -70,23 +76,19 @@
     switch (type.value) {
       case `flat`:
         minPrice = HousingPrices.FLAT;
-        price.placeholder = HousingPrices.FLAT;
         break;
       case `bungalow`:
         minPrice = HousingPrices.BUNGALO;
-        price.placeholder = HousingPrices.BUNGALO;
         break;
       case `house`:
         minPrice = HousingPrices.HOUSE;
-        price.placeholder = HousingPrices.HOUSE;
         break;
       case `palace`:
         minPrice = HousingPrices.PALACE;
-        price.placeholder = HousingPrices.PALACE;
         break;
-      default:
-        minPrice = 0;
     }
+
+    setMinPrice(minPrice);
 
     price.setCustomValidity(``);
     if (price.value < minPrice) {
@@ -149,9 +151,14 @@
     }
   };
 
+  let resetPrice = () => {
+  setMinPrice(DEFAULT_PRICE);
+  };
+
   window.form = {
     removeImage,
     validateCapacity,
+    resetPrice,
     capacity
   };
 

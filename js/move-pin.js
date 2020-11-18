@@ -1,11 +1,12 @@
 'use strict';
 
 (() => {
-  const PIN_SIZE_WIDTH = 62;
+  const PIN_SIZE_WIDTH = 64;
+  const HALF_PIN_SIZE = Math.round(PIN_SIZE_WIDTH/2);
   const PIN_SIZE_HEIGHT = 72;
-  const MAX_WIDTH = 1135 + (PIN_SIZE_WIDTH / 2);
-  const MIN_WIDTH = 0 - (PIN_SIZE_WIDTH / 2);
-  const START_WIDTH = 600 - (PIN_SIZE_WIDTH / 2);
+  const MAX_WIDTH = 1137 + HALF_PIN_SIZE;
+  const MIN_WIDTH = 0 - HALF_PIN_SIZE - 1;
+  const START_WIDTH = 600 - HALF_PIN_SIZE;
   const START_WIDTH_VALUE = 600;
   const MAX_HEIGHT = 631 - PIN_SIZE_HEIGHT;
   const MIN_HEIGHT = 129 - PIN_SIZE_HEIGHT;
@@ -47,7 +48,7 @@
       if ((mapPinMain.offsetTop - shift.y) < MAX_HEIGHT && (mapPinMain.offsetTop - shift.y) > MIN_HEIGHT && (mapPinMain.offsetLeft - shift.x) < MAX_WIDTH && (mapPinMain.offsetLeft - shift.x) > MIN_WIDTH) {
         mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + `px`;
         mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + `px`;
-        address.value = (mapPinMain.offsetLeft - shift.x + PIN_SIZE_WIDTH / 2) + `,` + (mapPinMain.offsetTop - shift.y + PIN_SIZE_HEIGHT);
+        address.value = (mapPinMain.offsetLeft - shift.x + HALF_PIN_SIZE) + `,` + (mapPinMain.offsetTop - shift.y + PIN_SIZE_HEIGHT);
       }
     };
 
@@ -79,7 +80,7 @@
     address.value = START_WIDTH_VALUE + `,` + START_HEIGHT_VALUE;
   };
 
-  window.movepin = {
+  window.movePin = {
     startPosition: getPinStartPosition,
     setStartCoordinates
   };
